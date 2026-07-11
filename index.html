@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charte de Sécurité et d'Utilisation de l'IA - SIFA</title>
+    
+	<!-- ===============================================-->
+    <!--    Favicons-->
+    <!-- ===============================================-->
+    <link rel="apple-touch-icon" sizes="180x180" href="logoSifa.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="logoSifa.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="logoSifa.png">
+ 
+	<style>
+        body { background-color: #f4f7f9; padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .charte-container { 
+            line-height: 1.6; 
+            color: #333; 
+            max-width: 850px; 
+            margin: 0 auto; 
+            border-radius: 12px; 
+            padding: 35px; 
+            background: #fff; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .header-with-image {
+            display: flex;
+            align-items: center;
+            border-bottom: 3px solid #0056b3;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            gap: 20px;
+        }
+        .header-with-image img { height: 100px; width: auto; border-radius: 6px; }
+        .header-text h1 { color: #0056b3; margin: 0; font-size: 22px; text-transform: uppercase; }
+        
+        .section-title { font-weight: bold; margin-top: 22px; text-decoration: underline; color: #2d3748; font-size: 1.1em; }
+        .status-box { padding: 15px; border-radius: 8px; margin-top: 8px; font-size: 0.95em; }
+        .authorized { background: #f0fff4; border: 1px solid #c6f6d5; }
+        .strict { background: #fffaf0; border: 1px solid #feebc8; }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.9em;
+            background: #fafbfc;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e1e8ed;
+        }
+        th {
+            background-color: #edf2f7;
+            color: #2d3748;
+            font-weight: bold;
+        }
+        
+        .rules-list { background: #ebf8ff; border: 1px solid #bee3f8; padding: 15px; border-radius: 8px; margin-top: 15px; }
+        .rules-list strong { color: #2b6cb0; display: block; margin-bottom: 8px; text-transform: uppercase; font-size: 0.85em; }
+        
+        ul { padding-left: 20px; margin: 5px 0; }
+        li { margin-bottom: 5px; }
+        
+        .example-box {
+            background: #f7fafc;
+            border-left: 4px solid #3182ce;
+            padding: 12px 15px;
+            margin-top: 10px;
+            border-radius: 0 6px 6px 0;
+            font-size: 0.9em;
+        }
+        
+        .footer { margin-top: 35px; font-size: 0.85em; color: #718096; text-align: center; border-top: 1px solid #edf2f7; padding-top: 15px; }
+        .badge { font-size: 0.8em; font-weight: normal; color: #4a5568; font-style: italic; }
+    </style>
+</head>
+<body>
+
+<div class="charte-container">
+    
+    <div class="header-with-image">
+        <img src="logoSifa.png" alt="IA SIFA">
+        <div class="header-text">
+            <h1>Charte de Sécurité et d'Utilisation de l'IA</h1>
+            <p style="margin:0; font-size: 0.95em; color: #64748b;">Groupe SIFA - Sécurité des Systèmes d'Information</p>
+        </div>
+    </div>
+
+    <p><em>En raison des risques cyber, l'accès aux IA est bloqué par défaut depuis le réseau interne, à l'exception des modèles listés ci-dessous. Le risque majeur ne réside pas dans l'outil, mais dans <strong>la nature des données exposées</strong>.</em></p>
+
+    <div class="section-title">1. CLASSIFICATION ET RISQUE DES DONNÉES</div>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 25%;">Niveau de Donnée</th>
+                <th style="width: 45%;">Description et données concernées</th>
+                <th style="width: 30%;">Action autorisée</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Données Critiques</strong></td>
+                <td>Données issues de GTrans, tarifs, listings clients, données financières, personnelles (RGPD) et code source.</td>
+                <td><strong>Exclusif aux outils validés</strong> (cf. Section 2)</td>
+            </tr>
+            <tr>
+                <td><strong>Données Publiques</strong></td>
+                <td>Recherche générique, vulgarisation de concepts techniques, informations non confidentielles.</td>
+                <td>Autorisé sous contrôle strict</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="section-title">2. INVENTAIRE DES OUTILS AUTORISÉS</div>
+    
+    <div class="status-box authorized">
+        <strong>A. Outils d'Entreprise (Données sous contrôle)</strong>
+        <ul>
+            <li><strong>Microsoft Copilot Enterprise & M365 Copilot :</strong> Environnement étanche. Les données ne sont pas utilisées pour l'entraînement public.</li>
+            <li><strong>OpenAI API & Groq :</strong> Usage technique exclusif aux serveurs EDI pour les développements et tests.</li>
+            <li><strong>Gemini Pro :</strong> Dérogation spécifique pour le service Douane NC <em><span class="badge">(en cours de remplacement)</span></em>.</li>
+        </ul>
+    </div>
+
+    <div class="status-box strict" style="margin-top: 10px;">
+        <strong>B. Outils Publics sous Contrôle Strict</strong>
+        <p style="margin: 5px 0 5px 0;"><em>Mistral (leChat), ChatGPT, Claude, Gemini, Perplexity.</em></p>
+        <ul>
+            <li>Tolérés uniquement pour des recherches ne contenant pas de données d'exploitation.</li>
+        </ul>
+    </div>
+
+    <div class="section-title">3. RÈGLES D'USAGE ET ACTIONS SURVEILLÉES</div>
+    <div class="rules-list">
+        <strong>Ce qui est strictement interdit sur les outils publics :</strong>
+        <ul>
+            <li>Aucun document interne ou confidentiel (GTrans).</li>
+            <li>Aucun upload de fichier (PDF, Excel, images).</li>
+            <li>Aucun plugin ou extension de navigateur non audité.</li>
+            <li>Aucune autorisation d'accès persistante (micro, caméra, fichiers).</li>
+        </ul>
+        <strong style="margin-top:10px;">Monitoring :</strong>
+        <ul>
+            <li>Les flux sortants vers les services d'IA sont surveillés en continu.</li>
+        </ul>
+    </div>
+
+    <div class="section-title">4. CAS PRATIQUES</div>
+    
+    <div class="example-box">
+        <strong>Cas 1 : Résumer ou analyser une opération logistique (GTrans)</strong><br>
+        <span style="color: #2b6cb0;">✔ Outil recommandé :</span> Microsoft Copilot.<br>
+        <em>Règle : Traitement autorisé en interne, car la confidentialité est garantie.</em>
+    </div>
+
+    <div class="example-box">
+        <strong>Cas 2 : Traduire un e-mail commercial (standard)</strong><br>
+        <span style="color: #2b6cb0;">✔ Outil autorisé :</span> Mistral ou ChatGPT (version publique).<br>
+        <em>Règle : Autorisé à condition de ne mentionner aucun nom de client ni données chiffrées.</em>
+    </div>
+
+    <div class="example-box">
+        <strong>Cas 3 : Développement informatique et tests EDI</strong><br>
+        <span style="color: #2b6cb0;">✔ Outil autorisé :</span> OpenAI API / Groq.<br>
+        <em>Règle : Utilisation via les serveurs EDI uniquement. Aucune donnée métier.</em>
+    </div>
+
+    <div class="section-title">5. RESPONSABILITÉ ET VALIDATION</div>
+    <p>L'IA est un outil d'assistance à la décision. L'utilisateur reste seul responsable de l'exactitude du contenu. En cas de divergence avec l'IA, les données extraites du logiciel de gestion <strong>GTrans</strong> font foi.</p>
+
+    <div class="footer">
+        Document mis à jour le 9 avril 2026<br>
+        © 2026 Groupe SIFA - Département Infrastructure & Sécurité
+    </div>
+</div>
+
+</body>
+</html>
