@@ -83,7 +83,18 @@ HEADER_FIELD_HINTS = {
         "livraison, pas la référence de commande du client, même si le "
         "libellé se ressemble. Renvoie UNIQUEMENT la valeur isolée (le code "
         "après le libellé), jamais toute la ligne de texte brute qui "
-        "l'entoure (pas de date ni de code interne collés à la suite)."
+        "l'entoure (pas de date ni de code interne collés à la suite). "
+        "ATTENTION : ne confonds JAMAIS avec 'N° client'/'Code client' - "
+        "c'est le numéro de COMPTE du client chez l'émetteur (identifiant "
+        "commercial permanent), jamais une référence de commande, même s'il "
+        "apparaît bien en évidence près du numéro de facture. Sur certains "
+        "documents (ex: factures récapitulatives consolidant plusieurs "
+        "commandes/livraisons), la référence de commande n'est pas dans le "
+        "bloc d'en-tête mais répétée à l'identique à côté de CHAQUE ligne "
+        "d'article, sous un libellé du type 'Votre N° de cde' - une valeur "
+        "qui revient à l'identique sur toutes les lignes d'articles est un "
+        "signal fort qu'il s'agit de la référence de commande à renvoyer, "
+        "même si elle n'apparaît pas dans l'en-tête du document."
     ),
     "devise": "devise du montant total (ex: EUR, USD)",
     "montant_total": "montant total du document (ex: 'Total TTC', 'Valeur totale', 'Net à payer')",
