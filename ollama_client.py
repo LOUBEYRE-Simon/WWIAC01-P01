@@ -106,6 +106,15 @@ def call_ollama_json(
                 "format": "json",
                 "stream": False,
                 "options": {"temperature": temperature},
+                # Désactive la phase de "réflexion" des modèles hybrides à
+                # raisonnement (Qwen3, DeepSeek-R1...) - observé en usage réel :
+                # sans ce paramètre, ces modèles peuvent épuiser tout leur
+                # budget de génération en raisonnement interne ("thinking")
+                # sans jamais produire la réponse JSON attendue (content vide,
+                # done_reason="length"). Ignoré sans erreur par les modèles qui
+                # ne supportent pas ce paramètre (comportement Ollama standard
+                # pour les champs de requête non reconnus par un modèle donné).
+                "think": False,
             },
             timeout=timeout,
         )
@@ -126,8 +135,23 @@ def call_ollama_json(
     except json.JSONDecodeError as exc:
         raise OllamaError(f"Réponse Ollama non-JSON au niveau HTTP : {exc} - contenu : {response.text[:500]}")
 
-    content = (body.get("message") or {}).get("content", "")
+    message = body.get("message") or {}
+    content = message.get("content", "")
     if not content:
+        # Cas identifié en usage réel : un modèle hybride à raisonnement (Qwen3,
+        # DeepSeek-R1...) a épuisé son budget de génération dans le champ
+        # "thinking" sans jamais écrire de réponse dans "content" - visible ici
+        # via done_reason="length" et un champ "thinking" non vide. "think":
+        # False (voir plus haut) est censé éviter ce cas, mais certains modèles
+        # peuvent ne pas le respecter.
+        if message.get("thinking") and body.get("done_reason") == "length":
+            raise OllamaError(
+                f"Le modèle '{model}' a épuisé son budget de génération en "
+                f"réflexion interne (\"thinking\") sans produire de réponse "
+                f"(done_reason='length') - probablement un modèle hybride à "
+                f"raisonnement mal adapté à une extraction JSON directe. "
+                f"Extrait du raisonnement : {str(message.get('thinking'))[:500]}"
+            )
         raise OllamaError(f"Réponse Ollama vide ou de forme inattendue : {body}")
 
     return _extract_json(content)
