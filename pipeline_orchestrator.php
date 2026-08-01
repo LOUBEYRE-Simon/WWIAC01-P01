@@ -254,6 +254,8 @@ function process_document(
         $documentType = null;
         $documentTypeConfidence = 0.0;
         $header = null;
+        $modelUsed = null; // modèle Ollama réellement utilisé pour step5 (voir en bas) - renvoyé
+                           // à l'appelant pour ne plus avoir à s'en souvenir manuellement entre tests
         $allLines = [];
         $allRawText = [];    // texte de chaque page correctement extraite, pour l'étape 5 (voir plus bas)
         $successfulPages = []; // [['page_number' => N, 'raw_text' => '...'], ...] - alimente la 2e passe (step6)
@@ -409,11 +411,17 @@ function process_document(
                 ], $ollamaOverrides), STEP_TIMEOUTS['header']);
             });
             $header = $headerResult['header'];
+            // 'model' renvoyé par step5_ollama_header.py = le modèle EFFECTIVEMENT
+            // utilisé (override si fourni, sinon DEFAULT_MODEL résolu côté Python) -
+            // plus fiable que de renvoyer tel quel le $model potentiellement null
+            // reçu en paramètre.
+            $modelUsed = $headerResult['model'] ?? $model;
         }
 
         return [
             'status' => 'ok',
             'duration_ms' => round((microtime(true) - $globalStart) * 1000),
+            'model' => $modelUsed,
             'nb_pages' => $nbPages,
             'document_type' => $documentType,
             'document_type_confidence' => $documentTypeConfidence,
