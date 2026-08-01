@@ -67,8 +67,14 @@ HEADER_FIELD_HINTS = {
         "juste après la rue dans le texte source."
     ),
     "destinataire_nom": (
-        "nom de l'entité qui reçoit la marchandise et/ou la facture - "
-        "peut y avoir une adresse de facturation et une adresse de livraison distinctes"
+        "nom de l'entité qui reçoit la marchandise et/ou la facture - peut y "
+        "avoir un destinataire de livraison et un destinataire de facturation "
+        "distincts (blocs typiquement intitulés 'LIVRAISON:'/'Livré à' et "
+        "'FACTURATION:'/'Confirmé à'). Si ces deux noms diffèrent, renvoie au "
+        "moins le nom associé à la FACTURATION (celui qui reçoit la facture, "
+        "pas seulement la marchandise) plutôt que de renvoyer null - ne "
+        "renvoie null que si AUCUN nom de destinataire n'est identifiable "
+        "nulle part dans le texte."
     ),
     "destinataire_adresse": (
         "adresse(s) du destinataire (facturation et/ou livraison si distinctes). "
@@ -79,8 +85,18 @@ HEADER_FIELD_HINTS = {
     ),
     "numero_document": (
         "numéro de la facture/du document (ex: 'Facture: 91036701', 'N° de "
-        "facture'). Renvoie UNIQUEMENT le numéro isolé (ex: '91036701'), "
-        "jamais le mot 'Facture' ou le libellé qui le précède accolé devant."
+        "facture', 'N° DE FACTURE', 'N° DE FAC'). Renvoie UNIQUEMENT le "
+        "numéro isolé (ex: '91036701'), jamais le mot 'Facture' ou le "
+        "libellé qui le précède accolé devant. ATTENTION : ne confonds "
+        "JAMAIS avec le numéro de commande/bon de commande ('N° BON DE "
+        "CDE', 'Bon de commande', voir reference_commande) - même si ce "
+        "numéro de commande est plus court, plus lisible, ou identique sur "
+        "toutes les pages (donc visuellement plus fiable qu'un numéro de "
+        "facture parfois mal OCRisé et légèrement différent d'une page à "
+        "l'autre) - ce n'est PAS le numero_document. En cas de plusieurs "
+        "valeurs candidates légèrement différentes pour le numéro de "
+        "facture sur des pages différentes (probable bruit OCR), choisis "
+        "la valeur qui revient le plus souvent."
     ),
     "date_document": (
         "date d'émission du document (ex: 'Date de facture'). Peut aussi "
@@ -95,7 +111,8 @@ HEADER_FIELD_HINTS = {
         "PAS un numéro de bordereau/BL, PAS un code client. Peut apparaître "
         "sous des libellés variés : 'Votre référence', 'Numéro de commande', "
         "'N° de commande', 'Commande client n°', 'Numéro d'engagement', "
-        "'PO number', 'Order reference'. EXCLUS explicitement : 'Livraison "
+        "'N° BON DE CDE', 'Bon de commande', 'PO number', 'Order reference'. "
+        "EXCLUS explicitement : 'Livraison "
         "client n°', 'Préparation livraison n°' - ce sont des références de "
         "livraison, pas la référence de commande du client, même si le "
         "libellé se ressemble. Renvoie UNIQUEMENT la valeur isolée (le code "
