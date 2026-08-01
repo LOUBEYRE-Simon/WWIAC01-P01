@@ -18,6 +18,7 @@ sans changer l'interface de ce module (même structure de retour).
 import subprocess
 import tempfile
 import os
+from collections import OrderedDict
 from dataclasses import dataclass, field
 from typing import List, Optional
 
@@ -82,13 +83,59 @@ def _render_page_to_image(pdf_path: str, page_number: int, out_dir: str, dpi: in
     return os.path.join(out_dir, sorted(candidates)[0])
 
 
+def _reconstruct_layout(lines: "OrderedDict") -> str:
+    """
+    Reconstruit un texte avec mise en page approximative à partir des positions
+    (left/width) de chaque mot - équivalent de pdftotext -layout, mais pour
+    la sortie OCR. Sans ça, la mise en page en colonnes (tableaux de lignes de
+    facture, en-têtes alignés...) est perdue : les mots d'une ligne étaient
+    simplement rejoints par un unique espace, quelle que soit leur position
+    réelle sur la page.
+
+    Principe : pour chaque ligne, on estime la largeur moyenne d'un caractère
+    (largeur du mot / nombre de caractères) et on convertit l'écart en pixels
+    entre deux mots en un nombre d'espaces approximatif - la même logique que
+    pdftotext utilise pour aligner des colonnes en sortie texte.
+    """
+    all_words = [w for words in lines.values() for w in words]
+    global_char_widths = [w.width / max(1, len(w.text)) for w in all_words if w.text]
+    global_avg_char_width = (sum(global_char_widths) / len(global_char_widths)) if global_char_widths else 8.0
+
+    rendered_lines = []
+    prev_key = None
+    for key, line_words in lines.items():
+        # Saut de paragraphe visuel quand on change de bloc/paragraphe Tesseract
+        # (comme les lignes blanches entre sections dans un pdftotext -layout).
+        if prev_key is not None and key[:2] != prev_key[:2]:
+            rendered_lines.append("")
+        prev_key = key
+
+        ordered = sorted(line_words, key=lambda w: w.left)
+        char_widths = [w.width / max(1, len(w.text)) for w in ordered if w.text]
+        avg_char_width = (sum(char_widths) / len(char_widths)) if char_widths else global_avg_char_width
+        avg_char_width = max(avg_char_width, 1.0)
+
+        parts = []
+        prev_right = None
+        for w in ordered:
+            if prev_right is not None:
+                gap = w.left - prev_right
+                nb_spaces = max(1, round(gap / avg_char_width))
+                parts.append(" " * nb_spaces)
+            parts.append(w.text)
+            prev_right = w.left + w.width
+        rendered_lines.append("".join(parts))
+
+    return "\n".join(rendered_lines)
+
+
 def _ocr_image(image_path: str, lang: str = "fra+eng") -> PageExtraction:
     """OCR local via Tesseract, avec récupération du texte ET des positions mot par mot."""
     image = Image.open(image_path)
     data = pytesseract.image_to_data(image, lang=lang, output_type=pytesseract.Output.DICT)
 
     words: List[Word] = []
-    lines = {}
+    lines: "OrderedDict" = OrderedDict()
     n = len(data["text"])
     for i in range(n):
         raw_word = data["text"][i].strip()
@@ -102,11 +149,12 @@ def _ocr_image(image_path: str, lang: str = "fra+eng") -> PageExtraction:
             conf=conf,
         )
         words.append(w)
-        # reconstruction de lignes pour un texte lisible (regroupement par bloc/ligne)
+        # regroupement par bloc/paragraphe/ligne Tesseract - la reconstruction
+        # de la mise en page (espacement) se fait ensuite dans _reconstruct_layout
         key = (data["block_num"][i], data["par_num"][i], data["line_num"][i])
-        lines.setdefault(key, []).append(raw_word)
+        lines.setdefault(key, []).append(w)
 
-    full_text = "\n".join(" ".join(tokens) for tokens in lines.values())
+    full_text = _reconstruct_layout(lines)
 
     return PageExtraction(
         page_number=0,  # rempli par l'appelant

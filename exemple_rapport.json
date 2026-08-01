@@ -1,0 +1,1161 @@
+[
+  {
+    "file": "FEX-DOC-000000780647.pdf",
+    "pages": [
+      {
+        "page_number": 1,
+        "extraction": {
+          "source": "ocr",
+          "engine": "tesseract(fra+eng)",
+          "char_count": 1642
+        },
+        "classification": {
+          "document_type": "invoice",
+          "confidence": 0.79,
+          "score": 56,
+          "second_score": 15
+        },
+        "anonymized_text": "FACTURE\nCOMMERCIALE 5255 VE0 |\nN° de Facture:\nDate de facture:\n: Numéro de Client:\nNom du Client:\n| Contact Client:\n| Téléphone du Client:\nAdresse de Facturation:\nCLINIQUE LES [ORGANIZATION_9]\nCode TVA Client: [LOCATION_9]\n| Date d'expédition\n! Mode d'expédition\n[ORGANIZATION_13]\nConditions de paiement\nVolume\nNombre de palettes\nNombre de colis\n: | Poids net\nTotal Poids brut\n| EPAE FORTS CUSTOM ONLY\n| Commentaires |\nStryker [ORGANIZATION_12]FRANS MAASWEG 2 7 PY er\nTél: [PHONE_NUMBER_6]\nOn behaff of:\n[ORGANIZATION_11]\n[LOCATION_8] Avenue de Satolas Green RS1187\n69330 [PERSON_6] : [PHONE_NUMBER_5]\n[PERSON_5] : [PHONE_NUMBER_4]\nVAT: [PERSON_4]\n[PERSON_3]:\nPaget of 1\n318997208\n07-JUL-26\n[ORGANIZATION_10]\nCLINIQUE LES [ORGANIZATION_9]\nAdresse de Livrai\n07-JUL-26\nUPS - Standard - CDC to FR End\nCustomers\nEUR\n11/06/2026\n[ORGANIZATION_8], SOPHIA\n60 JOURS DATE FACTURE\n9999999 L\n2\n14.8 [LOCATION_7]\n14.85 [LOCATION_7]\ncore —— sur la ontact: [LOCATION_6] PORTO TEL [ORGANIZATION_7] — [PHONE_NUMBER_3]\n[ORGANIZATION_6]\n[ORGANIZATION_5]\ninterne\nTotal Montant TVA Total\nTaxable\n| Siège Social : [LOCATION_5] - 69330 PUSIGNAN - [ORGANIZATION_4] au capital de 27 495 520 [LOCATION_4] 333 710 275 R.C.S. Lyon SIRET 333 710 275 00061 - API\n[ORGANIZATION_3]Article Désignation Code Rays Qté Prix Total\nd'expéditio commande références [PERSON_2] d'origine |livrée unitaire\n[ORGANIZATION_2]? 1013113173 Sn 012808 0753002101S JASSY, JACK, CONSTANT P402900000 | | ‘FA. [LOCATION_3]. | 5598) 000) 1961 | 1967-84)\n[ORGANIZATION_1]\n2 ner 1013113173 PRE [PHONE_NUMBER_2] |0026342000 GROOVE PIN [PHONE_NUMBER_1] D\n508\nMontant Net HT 1966.08\n[PERSON_1] 0.00\n1966.08 Montant Total TTC 1966.08\n4646 Z - N° Intracommunautaire FR45333710275\nAdresse de règlement : [LOCATION_2] de [LOCATION_1] - 69330 PUSIGNAN",
+        "dispatch_preview": {
+          "provider": "(non configuré)",
+          "instruction": "Extraire montant total, devise, échéance et vérifier la cohérence TVA/HT/TTC.",
+          "document_type": "invoice",
+          "confidence": 0.79,
+          "content_sent": "FACTURE\nCOMMERCIALE 5255 VE0 |\nN° de Facture:\nDate de facture:\n: Numéro de Client:\nNom du Client:\n| Contact Client:\n| Téléphone du Client:\nAdresse de Facturation:\nCLINIQUE LES [ORGANIZATION_9]\nCode TVA Client: [LOCATION_9]\n| Date d'expédition\n! Mode d'expédition\n[ORGANIZATION_13]\nConditions de paiement\nVolume\nNombre de palettes\nNombre de colis\n: | Poids net\nTotal Poids brut\n| EPAE FORTS CUSTOM ONLY\n| Commentaires |\nStryker [ORGANIZATION_12]FRANS MAASWEG 2 7 PY er\nTél: [PHONE_NUMBER_6]\nOn behaff of:\n[ORGANIZATION_11]\n[LOCATION_8] Avenue de Satolas Green RS1187\n69330 [PERSON_6] : [PHONE_NUMBER_5]\n[PERSON_5] : [PHONE_NUMBER_4]\nVAT: [PERSON_4]\n[PERSON_3]:\nPaget of 1\n318997208\n07-JUL-26\n[ORGANIZATION_10]\nCLINIQUE LES [ORGANIZATION_9]\nAdresse de Livrai\n07-JUL-26\nUPS - Standard - CDC to FR End\nCustomers\nEUR\n11/06/2026\n[ORGANIZATION_8], SOPHIA\n60 JOURS DATE FACTURE\n9999999 L\n2\n14.8 [LOCATION_7]\n14.85 [LOCATION_7]\ncore —— sur la ontact: [LOCATION_6] PORTO TEL [ORGANIZATION_7] — [PHONE_NUMBER_3]\n[ORGANIZATION_6]\n[ORGANIZATION_5]\ninterne\nTotal Montant TVA Total\nTaxable\n| Siège Social : [LOCATION_5] - 69330 PUSIGNAN - [ORGANIZATION_4] au capital de 27 495 520 [LOCATION_4] 333 710 275 R.C.S. Lyon SIRET 333 710 275 00061 - API\n[ORGANIZATION_3]Article Désignation Code Rays Qté Prix Total\nd'expéditio commande références [PERSON_2] d'origine |livrée unitaire\n[ORGANIZATION_2]? 1013113173 Sn 012808 0753002101S JASSY, JACK, CONSTANT P402900000 | | ‘FA. [LOCATION_3]. | 5598) 000) 1961 | 1967-84)\n[ORGANIZATION_1]\n2 ner 1013113173 PRE [PHONE_NUMBER_2] |0026342000 GROOVE PIN [PHONE_NUMBER_1] D\n508\nMontant Net HT 1966.08\n[PERSON_1] 0.00\n1966.08 Montant Total TTC 1966.08\n4646 Z - N° Intracommunautaire FR45333710275\nAdresse de règlement : [LOCATION_2] de [LOCATION_1] - 69330 PUSIGNAN",
+          "note": "STUB - aucun appel réseau réel effectué."
+        },
+        "_local_only_entity_mapping": {
+          "[LOCATION_1]": "satolas green",
+          "[LOCATION_2]": "zac",
+          "[PERSON_1]": "montant tva",
+          "[PHONE_NUMBER_1]": "7318290090",
+          "[PHONE_NUMBER_2]": "0672603",
+          "[ORGANIZATION_1]": "descent",
+          "[LOCATION_3]": "ea 653",
+          "[ORGANIZATION_2]": "ps",
+          "[PERSON_2]": "douanier",
+          "[ORGANIZATION_3]": "n° d'",
+          "[LOCATION_4]": "euro",
+          "[ORGANIZATION_4]": "sas",
+          "[LOCATION_5]": "zac satolas green",
+          "[ORGANIZATION_5]": "n° n° de vos",
+          "[ORGANIZATION_6]": "sontenes",
+          "[PHONE_NUMBER_3]": "02 62 42 80 04",
+          "[ORGANIZATION_7]": "ot",
+          "[LOCATION_6]": "christine porto lee christine",
+          "[LOCATION_7]": "kg",
+          "[ORGANIZATION_8]": "hourani",
+          "[ORGANIZATION_9]": "orchidees",
+          "[ORGANIZATION_10]": "frw9769",
+          "[PERSON_3]": "eori",
+          "[PERSON_4]": "fr45333710275",
+          "[PHONE_NUMBER_4]": "04 72 45 36 99",
+          "[PERSON_5]": "fax",
+          "[PHONE_NUMBER_5]": "04 72 45 36 00",
+          "[PERSON_6]": "pusignan\nfrance\ntél",
+          "[LOCATION_8]": "zac -",
+          "[ORGANIZATION_11]": "stryker france sas",
+          "[PHONE_NUMBER_6]": "0031777510965",
+          "[ORGANIZATION_12]": "emea supply chain services bv st k e",
+          "[ORGANIZATION_13]": "incoterms",
+          "[LOCATION_9]": "fr51310862024"
+        },
+        "_local_only_entities_detected": [
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 176,
+            "end": 185,
+            "score": 0.85,
+            "original_value": "ORCHIDEES"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 203,
+            "end": 216,
+            "score": 0.85,
+            "original_value": "FR51310862024"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 257,
+            "end": 266,
+            "score": 0.85,
+            "original_value": "Incoterms"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 413,
+            "end": 450,
+            "score": 0.85,
+            "original_value": "EMEA Supply Chain Services BV st k e\n"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 507,
+            "end": 525,
+            "score": 0.85,
+            "original_value": "Stryker France SAS"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 526,
+            "end": 531,
+            "score": 0.85,
+            "original_value": "ZAC -"
+          },
+          {
+            "entity_type": "PERSON",
+            "start": 569,
+            "end": 588,
+            "score": 0.85,
+            "original_value": "Pusignan\nFrance\nTél"
+          },
+          {
+            "entity_type": "PERSON",
+            "start": 606,
+            "end": 609,
+            "score": 0.85,
+            "original_value": "Fax"
+          },
+          {
+            "entity_type": "PERSON",
+            "start": 632,
+            "end": 645,
+            "score": 0.85,
+            "original_value": "FR45333710275"
+          },
+          {
+            "entity_type": "PERSON",
+            "start": 646,
+            "end": 650,
+            "score": 0.85,
+            "original_value": "EORI"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 683,
+            "end": 690,
+            "score": 0.85,
+            "original_value": "FRW9769"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 704,
+            "end": 713,
+            "score": 0.85,
+            "original_value": "ORCHIDEES"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 798,
+            "end": 805,
+            "score": 0.85,
+            "original_value": "HOURANI"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 853,
+            "end": 855,
+            "score": 0.85,
+            "original_value": "KG"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 862,
+            "end": 864,
+            "score": 0.85,
+            "original_value": "KG"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 888,
+            "end": 917,
+            "score": 0.85,
+            "original_value": "CHRISTINE PORTO LEE CHRISTINE"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 928,
+            "end": 930,
+            "score": 0.85,
+            "original_value": "OT"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 948,
+            "end": 956,
+            "score": 0.85,
+            "original_value": "SONTENES"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 957,
+            "end": 969,
+            "score": 0.85,
+            "original_value": "N° N° de Vos"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 1027,
+            "end": 1044,
+            "score": 0.85,
+            "original_value": "ZAC Satolas Green"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 1064,
+            "end": 1067,
+            "score": 0.85,
+            "original_value": "SAS"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 1093,
+            "end": 1097,
+            "score": 0.85,
+            "original_value": "Euro"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 1152,
+            "end": 1157,
+            "score": 0.85,
+            "original_value": "N° d'"
+          },
+          {
+            "entity_type": "PERSON",
+            "start": 1234,
+            "end": 1242,
+            "score": 0.85,
+            "original_value": "Douanier"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 1270,
+            "end": 1272,
+            "score": 0.85,
+            "original_value": "ps"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 1349,
+            "end": 1355,
+            "score": 0.85,
+            "original_value": "EA 653"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 1386,
+            "end": 1393,
+            "score": 0.85,
+            "original_value": "DESCENT"
+          },
+          {
+            "entity_type": "PERSON",
+            "start": 1486,
+            "end": 1497,
+            "score": 0.85,
+            "original_value": "Montant TVA"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 1605,
+            "end": 1608,
+            "score": 0.85,
+            "original_value": "ZAC"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 1612,
+            "end": 1625,
+            "score": 0.85,
+            "original_value": "Satolas Green"
+          },
+          {
+            "entity_type": "PHONE_NUMBER",
+            "start": 479,
+            "end": 492,
+            "score": 0.4,
+            "original_value": "0031777510965"
+          },
+          {
+            "entity_type": "PHONE_NUMBER",
+            "start": 591,
+            "end": 605,
+            "score": 0.4,
+            "original_value": "04 72 45 36 00"
+          },
+          {
+            "entity_type": "PHONE_NUMBER",
+            "start": 612,
+            "end": 626,
+            "score": 0.4,
+            "original_value": "04 72 45 36 99"
+          },
+          {
+            "entity_type": "PHONE_NUMBER",
+            "start": 933,
+            "end": 947,
+            "score": 0.4,
+            "original_value": "02 62 42 80 04"
+          },
+          {
+            "entity_type": "PHONE_NUMBER",
+            "start": 1415,
+            "end": 1422,
+            "score": 0.4,
+            "original_value": "0672603"
+          },
+          {
+            "entity_type": "PHONE_NUMBER",
+            "start": 1446,
+            "end": 1456,
+            "score": 0.4,
+            "original_value": "7318290090"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "file": "UT-DOC-000002336254.pdf",
+    "pages": [
+      {
+        "page_number": 1,
+        "extraction": {
+          "source": "ocr",
+          "engine": "tesseract(fra+eng)",
+          "char_count": 6038
+        },
+        "classification": {
+          "document_type": "dangerous_goods_declaration",
+          "confidence": 0.82,
+          "score": 71,
+          "second_score": 16
+        },
+        "anonymized_text": "Boutique {]] L.C, 77, [PERSON_19], 75014 [ORGANIZATION_31] par correspondance : SM GMJ Phoenix, 50, avenue de l'Europe - CS 50580 Émerainvillo - 77436 MARNE LA VALLÉE Cedex? = 2:[PHONE_NUMBER_3] - Fax : [PHONE_NUMBER_2] - She interet : www.gmiphoenix.com\nMOD 3905 En vents\nDÉCLARATION POUR LE TRANSPORT MULTIMODAL DE MARCHANDISES DANGEREUSES / [ORGANIZATION_30] DANGEROUS [ORGANIZATION_12] FORM N\nCe modèle peut être utilisé aux fins de la déclaration de marchandises\nde l'[LOCATION_23] de [LOCATION_22] 73/78 / [PERSON_18] form may be used as a dangerous\n1 Expéditeur / Shipper / [LOCATION_21] / [PERSON_17]\n[ORGANIZATION_29]\n11 [LOCATION_20]\n[ORGANIZATION_28]\n[LOCATION_19]\n6 Destinataire / Consignes\nPHARMACIE DE LA [ORGANIZATION_27]\nLA BOUCAN RN2\nLOTISSEMENT 1\n97115\n[LOCATION_18]\ndangereuses car |! satisfait aux prescriptions de la règle 4 du chapitre Vil de la Convention SOLAS de 1974, de la règle 4\ngoods declaration as it meets the requirements of SOLAS 74, chapter [PERSON_16], regulation 4; [ORGANIZATION_26] 73/78, [PERSON_15], regulation 4.\n2 [ORGANIZATION_25] du document de transport / Transport document number\n‘ SPageide pages /Page 1 of pages 4 Numéro de référence de l'Expéditeur\n1/1 Shipper's reference\n[ORGANIZATION_24]] [LOCATION_17] selon 1.1.4.2.1 5 Numéro de rélérence du transitaire\nFreight forwarder's reference\n7 Transporteur (à compléter par le transporteur) / [PERSON_14] (to be completed by the carrier)\nDÉCLARATION DE L'EXPÉDITEUR / SMIPPER\"S DÉCLARATION\nJe déclare que le contenu de ce chargement est décrit ci-dessous de façon compiète et exacte par la\nofficielle de transport et qu'il est convenablement classé, emballé, marqué, étiqueté, placardé et à tous égards\nbien conditionné pour être transporté conformément aux réglementations internationales et nationales\nl'hereby deciare that the contents of this consignment are and accurately described below by the proper\nshipping name, and are classified, [PERSON_13], rl dr que [LOCATION_16]\ncondition for transport according to the applicable intamational and national govemment regulations.\n© [LOCATION_15] complémentaires concernant la manutention / [ORGANIZATION_23] information\n8 Cet envoi est conforme aux [LOCATION_14] acceptables ; la mention non appicable\n[LOCATION_13] spment e ma De Entatons proeciDe6 dr: ([ORGANIZATION_22] noù epRo l\n[LOCATION_12]/DU CHARGEMENT\naccordance with {he applicable provisions. **\n[LOCATION_11]\n20 Nom de la société / [ORGANIZATION_21] et date / Place and date\n[PERSON_12] / Signature of declarant\nNom et qualité du déciarant / [LOCATION_10]/status of declarant\n[ORGANIZATION_20] D'EMPOTAGE/DE CHARGEMENT / CONTAINER/VEHICLE PACKING [LOCATION_9]\nJe déciare que les marchandises décriles ci-dessus ont [PERSON_11] dans le conteneurfvéhicule identifié\nc-dessus conformément aux dispositions applicat:es.**\nA [ORGANIZATION_19] ET À SIGNER POUR TOUT CHARGEMENT EN [ORGANIZATION_18]/VÉHICULE PAR LA PERSONNE RESPONSABLE\nl'hereby déclare that the goods described above have been packedioaded into ihe containerfvehicle identified above in\nMUST BE COMPLETED AND SIGNED FOR ALL CONTAINER/VEHICLE LOADS BY PERSON [ORGANIZATION_17] FOR\n21 REÇU À LA RÉCEPTION DES MARCHANDISES / RECENVING [ORGANIZATION_16]\nReçu ie nombre de colis/corteneurs/remorques déclaré ci-dessus en bon état apparent sauf résarves\nindiquées ci-après :\nReceived the above number of packages/containers/raiers in apparent good order and condition,\nunless stated hereon : RECEIVING ORGANLZATION REMARKS :\nNom du transporteur / Haulier's name 22 Nom de la société / [ORGANIZATION_15]\n@EL QUI PRÉPARE LE DOCUMENT)\n(OF SHIPPER PREPARING THIS NOTE)\n[ORGANIZATION_14]\nNom et quañté du déclarant\n[PERSON_10]/staius of declarant\n[ORGANIZATION_2]° d'immatriculation du véhicule / Vehicle reg. no.\n[PERSON_9] ot date / Signalure and date\n[PERSON_8]\n[PERSON_7] et date / Place and date\n[ORGANIZATION_13] , 21/07/2026\nSIGNATURE DU CHAUFFEUR / DRIVER'S SIGNATURE\nPOUR LES MATIÈRES DANGEREUSES / DANGEROUS [ORGANIZATION_12] : Spécifier : désignation officielle de transport, classe / division de danger, numéro [ORGANIZATION_11], groupe d'emballage, polluant marin (le cas échéant) et respecter les prescriptions obligatoires\n[ORGANIZATION_10] PASSAGERS ET CARGO AÉRONEF CARGO SEULEMENT [PERSON_6] cb\n[PERSON_5] d'urgence 24/24h: [PERSON_4] [PHONE_NUMBER_1]\n[ORGANIZATION_9] AND CARGO AIRCRAFT CARGO [PERSON_3] ë\n10 [ORGANIZATION_8]/r° de vol et date / Vessef#lght no. and date 11 Port/Lieu de chargement / [LOCATION_7]/piacs of loading\n42 [LOCATION_8] / [LOCATION_7]/piece of discharge 15 Destinaïon / Destination =\n[ORGANIZATION_7]\n14 Marques d'expédition * Nombre et type des colis ; description des marchandises [PERSON_2] brute [PERSON_2] netle [LOCATION_6] (m°)\n[ORGANIZATION_6] * Number and kind of packages ; description of goods Gross mass Net mess Cube {mn}\n[LOCATION_5] SOLUTION, [ORGANIZATION_5], class 3, [ORGANIZATION_4] Il, -37°[LOCATION_4], [LOCATION_3] n° F-E,S-D (cat:0) 0.60 kg 0.24 kg\nLimited Quantity / Overpack used\nThis shipment is made üp to 1 fireboard box, 12.0 units (PET)\nUN1170 ETHANOL (ETHYL ALCOHOL) or ETHANOL SOLUTION (ETHYL ALCOHOL SOLUTION), class 3, [ORGANIZATION_4] Il, 19.5°C, 7.00 kg 5.60 kg\nEMS n°F-E-S-D (cat:0)\nLimited Quantity / Overpack used\nThis shipment is made up to 1 fireboard box, 28.0 units (PET)\nUN1950 AEROSOLS, class 2.2 (cat:0) 1.80 kg 1.20 kg\nLimited Quantity / [ORGANIZATION_3], 12.0 units (PET)\nUN1950 AEROSOLS, class 2.2 (cat:0) 1.92 kg 1.80 kg\nLimited Quantity / [ORGANIZATION_3], 12.0 units (PET)\n15 [ORGANIZATION_2]° d'identification du conteneur 16 [LOCATION_2]) de scellement / [PERSON_1] number(s) re 18 [LOCATION_1] (kg) 19 Masse brute totale {y compris tare) (kg)\nou n° d'immatriculation du véhicule size & type Tare mass Total gross (including tare} (kg)\nIdentification no.ehicle registration no.\ndes réglementafions nationales et internationales appäcables. Aux fins du Code IMDG, voir paragraphe 5.4.1.4 / You must spécify : proper shipping name, hazard class, UN No., Packaging group, (where assigned) [ORGANIZATION_1] abserve|\nhe mandatory requirements under apphcable nafonel and intemasionai govemnmentei regulations. For the purposes of the H4DG Code see paragraph 5.4.1.4.\n** Aux fins du Code IMDG, voir paragraphe 5.4.2. / For he purposes of the IMDG Code see paragraph 5.4.2.",
+        "dispatch_preview": {
+          "provider": "(non configuré)",
+          "instruction": "Vérifier la cohérence des numéros ONU et classes de danger déclarés.",
+          "document_type": "dangerous_goods_declaration",
+          "confidence": 0.82,
+          "content_sent": "Boutique {]] L.C, 77, [PERSON_19], 75014 [ORGANIZATION_31] par correspondance : SM GMJ Phoenix, 50, avenue de l'Europe - CS 50580 Émerainvillo - 77436 MARNE LA VALLÉE Cedex? = 2:[PHONE_NUMBER_3] - Fax : [PHONE_NUMBER_2] - She interet : www.gmiphoenix.com\nMOD 3905 En vents\nDÉCLARATION POUR LE TRANSPORT MULTIMODAL DE MARCHANDISES DANGEREUSES / [ORGANIZATION_30] DANGEROUS [ORGANIZATION_12] FORM N\nCe modèle peut être utilisé aux fins de la déclaration de marchandises\nde l'[LOCATION_23] de [LOCATION_22] 73/78 / [PERSON_18] form may be used as a dangerous\n1 Expéditeur / Shipper / [LOCATION_21] / [PERSON_17]\n[ORGANIZATION_29]\n11 [LOCATION_20]\n[ORGANIZATION_28]\n[LOCATION_19]\n6 Destinataire / Consignes\nPHARMACIE DE LA [ORGANIZATION_27]\nLA BOUCAN RN2\nLOTISSEMENT 1\n97115\n[LOCATION_18]\ndangereuses car |! satisfait aux prescriptions de la règle 4 du chapitre Vil de la Convention SOLAS de 1974, de la règle 4\ngoods declaration as it meets the requirements of SOLAS 74, chapter [PERSON_16], regulation 4; [ORGANIZATION_26] 73/78, [PERSON_15], regulation 4.\n2 [ORGANIZATION_25] du document de transport / Transport document number\n‘ SPageide pages /Page 1 of pages 4 Numéro de référence de l'Expéditeur\n1/1 Shipper's reference\n[ORGANIZATION_24]] [LOCATION_17] selon 1.1.4.2.1 5 Numéro de rélérence du transitaire\nFreight forwarder's reference\n7 Transporteur (à compléter par le transporteur) / [PERSON_14] (to be completed by the carrier)\nDÉCLARATION DE L'EXPÉDITEUR / SMIPPER\"S DÉCLARATION\nJe déclare que le contenu de ce chargement est décrit ci-dessous de façon compiète et exacte par la\nofficielle de transport et qu'il est convenablement classé, emballé, marqué, étiqueté, placardé et à tous égards\nbien conditionné pour être transporté conformément aux réglementations internationales et nationales\nl'hereby deciare that the contents of this consignment are and accurately described below by the proper\nshipping name, and are classified, [PERSON_13], rl dr que [LOCATION_16]\ncondition for transport according to the applicable intamational and national govemment regulations.\n© [LOCATION_15] complémentaires concernant la manutention / [ORGANIZATION_23] information\n8 Cet envoi est conforme aux [LOCATION_14] acceptables ; la mention non appicable\n[LOCATION_13] spment e ma De Entatons proeciDe6 dr: ([ORGANIZATION_22] noù epRo l\n[LOCATION_12]/DU CHARGEMENT\naccordance with {he applicable provisions. **\n[LOCATION_11]\n20 Nom de la société / [ORGANIZATION_21] et date / Place and date\n[PERSON_12] / Signature of declarant\nNom et qualité du déciarant / [LOCATION_10]/status of declarant\n[ORGANIZATION_20] D'EMPOTAGE/DE CHARGEMENT / CONTAINER/VEHICLE PACKING [LOCATION_9]\nJe déciare que les marchandises décriles ci-dessus ont [PERSON_11] dans le conteneurfvéhicule identifié\nc-dessus conformément aux dispositions applicat:es.**\nA [ORGANIZATION_19] ET À SIGNER POUR TOUT CHARGEMENT EN [ORGANIZATION_18]/VÉHICULE PAR LA PERSONNE RESPONSABLE\nl'hereby déclare that the goods described above have been packedioaded into ihe containerfvehicle identified above in\nMUST BE COMPLETED AND SIGNED FOR ALL CONTAINER/VEHICLE LOADS BY PERSON [ORGANIZATION_17] FOR\n21 REÇU À LA RÉCEPTION DES MARCHANDISES / RECENVING [ORGANIZATION_16]\nReçu ie nombre de colis/corteneurs/remorques déclaré ci-dessus en bon état apparent sauf résarves\nindiquées ci-après :\nReceived the above number of packages/containers/raiers in apparent good order and condition,\nunless stated hereon : RECEIVING ORGANLZATION REMARKS :\nNom du transporteur / Haulier's name 22 Nom de la société / [ORGANIZATION_15]\n@EL QUI PRÉPARE LE DOCUMENT)\n(OF SHIPPER PREPARING THIS NOTE)\n[ORGANIZATION_14]\nNom et quañté du déclarant\n[PERSON_10]/staius of declarant\n[ORGANIZATION_2]° d'immatriculation du véhicule / Vehicle reg. no.\n[PERSON_9] ot date / Signalure and date\n[PERSON_8]\n[PERSON_7] et date / Place and date\n[ORGANIZATION_13] , 21/07/2026\nSIGNATURE DU CHAUFFEUR / DRIVER'S SIGNATURE\nPOUR LES MATIÈRES DANGEREUSES / DANGEROUS [ORGANIZATION_12] : Spécifier : désignation officielle de transport, classe / division de danger, numéro [ORGANIZATION_11], groupe d'emballage, polluant marin (le cas échéant) et respecter les prescriptions obligatoires\n[ORGANIZATION_10] PASSAGERS ET CARGO AÉRONEF CARGO SEULEMENT [PERSON_6] cb\n[PERSON_5] d'urgence 24/24h: [PERSON_4] [PHONE_NUMBER_1]\n[ORGANIZATION_9] AND CARGO AIRCRAFT CARGO [PERSON_3] ë\n10 [ORGANIZATION_8]/r° de vol et date / Vessef#lght no. and date 11 Port/Lieu de chargement / [LOCATION_7]/piacs of loading\n42 [LOCATION_8] / [LOCATION_7]/piece of discharge 15 Destinaïon / Destination =\n[ORGANIZATION_7]\n14 Marques d'expédition * Nombre et type des colis ; description des marchandises [PERSON_2] brute [PERSON_2] netle [LOCATION_6] (m°)\n[ORGANIZATION_6] * Number and kind of packages ; description of goods Gross mass Net mess Cube {mn}\n[LOCATION_5] SOLUTION, [ORGANIZATION_5], class 3, [ORGANIZATION_4] Il, -37°[LOCATION_4], [LOCATION_3] n° F-E,S-D (cat:0) 0.60 kg 0.24 kg\nLimited Quantity / Overpack used\nThis shipment is made üp to 1 fireboard box, 12.0 units (PET)\nUN1170 ETHANOL (ETHYL ALCOHOL) or ETHANOL SOLUTION (ETHYL ALCOHOL SOLUTION), class 3, [ORGANIZATION_4] Il, 19.5°C, 7.00 kg 5.60 kg\nEMS n°F-E-S-D (cat:0)\nLimited Quantity / Overpack used\nThis shipment is made up to 1 fireboard box, 28.0 units (PET)\nUN1950 AEROSOLS, class 2.2 (cat:0) 1.80 kg 1.20 kg\nLimited Quantity / [ORGANIZATION_3], 12.0 units (PET)\nUN1950 AEROSOLS, class 2.2 (cat:0) 1.92 kg 1.80 kg\nLimited Quantity / [ORGANIZATION_3], 12.0 units (PET)\n15 [ORGANIZATION_2]° d'identification du conteneur 16 [LOCATION_2]) de scellement / [PERSON_1] number(s) re 18 [LOCATION_1] (kg) 19 Masse brute totale {y compris tare) (kg)\nou n° d'immatriculation du véhicule size & type Tare mass Total gross (including tare} (kg)\nIdentification no.ehicle registration no.\ndes réglementafions nationales et internationales appäcables. Aux fins du Code IMDG, voir paragraphe 5.4.1.4 / You must spécify : proper shipping name, hazard class, UN No., Packaging group, (where assigned) [ORGANIZATION_1] abserve|\nhe mandatory requirements under apphcable nafonel and intemasionai govemnmentei regulations. For the purposes of the H4DG Code see paragraph 5.4.1.4.\n** Aux fins du Code IMDG, voir paragraphe 5.4.2. / For he purposes of the IMDG Code see paragraph 5.4.2.",
+          "note": "STUB - aucun appel réseau réel effectué."
+        },
+        "_local_only_entity_mapping": {
+          "[ORGANIZATION_1]": "marine polluant and",
+          "[LOCATION_1]": "tare",
+          "[PERSON_1]": "sea/",
+          "[LOCATION_2]": "numéro(s",
+          "[ORGANIZATION_2]": "n",
+          "[ORGANIZATION_3]": "overpack used\nthis shipment is made up to 1 fireboard box",
+          "[ORGANIZATION_4]": "pg",
+          "[LOCATION_3]": "ems",
+          "[LOCATION_4]": "c.c.c",
+          "[ORGANIZATION_5]": "flammable",
+          "[LOCATION_5]": "un2059 nitrocellulose",
+          "[ORGANIZATION_6]": "shipping marks",
+          "[LOCATION_6]": "cubage",
+          "[PERSON_2]": "masse",
+          "[ORGANIZATION_7]": "guadeloupe",
+          "[LOCATION_7]": "port",
+          "[LOCATION_8]": "port/lieu de déchargement",
+          "[ORGANIZATION_8]": "navira",
+          "[PERSON_3]": "aircraft only",
+          "[ORGANIZATION_9]": "passenger",
+          "[PHONE_NUMBER_1]": "+33 6 13 84 01 80",
+          "[PERSON_4]": "mme harel",
+          "[PERSON_5]": "numero",
+          "[PERSON_6]": "fons",
+          "[ORGANIZATION_10]": "aéronef",
+          "[ORGANIZATION_11]": "onu",
+          "[ORGANIZATION_12]": "goods",
+          "[ORGANIZATION_13]": "trignac",
+          "[PERSON_7]": "logistique\nleu",
+          "[PERSON_8]": "maud harel",
+          "[PERSON_9]": "signature",
+          "[PERSON_10]": "name",
+          "[ORGANIZATION_14]": "b2b pharma sas",
+          "[ORGANIZATION_15]": "name of company",
+          "[ORGANIZATION_16]": "organization receipt",
+          "[ORGANIZATION_17]": "responsible",
+          "[ORGANIZATION_18]": "conteneur",
+          "[ORGANIZATION_19]": "compléter",
+          "[PERSON_11]": "16 empotéesichargèes",
+          "[LOCATION_9]": "certificate",
+          "[ORGANIZATION_20]": "certificat",
+          "[LOCATION_10]": "narne",
+          "[PERSON_12]": "signature du déclerant",
+          "[ORGANIZATION_21]": "name of company\nlieu",
+          "[LOCATION_11]": "packinga.oading",
+          "[LOCATION_12]": "de l'empotage",
+          "[ORGANIZATION_22]": "do",
+          "[LOCATION_13]": "ts",
+          "[LOCATION_14]": "emites",
+          "[ORGANIZATION_23]": "additional handïing",
+          "[LOCATION_15]": "informations",
+          "[LOCATION_16]": "be",
+          "[PERSON_13]": "packaged",
+          "[PERSON_14]": "carrier",
+          "[LOCATION_17]": "transport",
+          "[ORGANIZATION_24]": "s01883\nc",
+          "[ORGANIZATION_25]": "numéro",
+          "[PERSON_15]": "annexe lil",
+          "[ORGANIZATION_26]": "marpol",
+          "[PERSON_16]": "vii",
+          "[LOCATION_18]": "sainte-rose",
+          "[ORGANIZATION_27]": "boucan",
+          "[LOCATION_19]": "france",
+          "[ORGANIZATION_28]": "zi altitude",
+          "[LOCATION_20]": "rue des fondeurs",
+          "[ORGANIZATION_29]": "b2b pharma",
+          "[PERSON_17]": "sender",
+          "[LOCATION_21]": "consignor",
+          "[PERSON_18]": "this",
+          "[LOCATION_22]": "marpol",
+          "[LOCATION_23]": "annexe ill",
+          "[ORGANIZATION_30]": "multimodal",
+          "[PHONE_NUMBER_2]": "01 61 44 14 29",
+          "[PHONE_NUMBER_3]": "01 61 44 14 20",
+          "[ORGANIZATION_31]": "paris\nvents",
+          "[PERSON_19]": "boulevard saint jacques"
+        },
+        "_local_only_entities_detected": [
+          {
+            "entity_type": "PERSON",
+            "start": 22,
+            "end": 45,
+            "score": 0.85,
+            "original_value": "Boulevard Saint Jacques"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 53,
+            "end": 64,
+            "score": 0.85,
+            "original_value": "PARIS\nVents"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 346,
+            "end": 356,
+            "score": 0.85,
+            "original_value": "MULTIMODAL"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 367,
+            "end": 372,
+            "score": 0.85,
+            "original_value": "GOODS"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 456,
+            "end": 466,
+            "score": 0.85,
+            "original_value": "Annexe Ill"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 470,
+            "end": 476,
+            "score": 0.85,
+            "original_value": "MARPOL"
+          },
+          {
+            "entity_type": "PERSON",
+            "start": 485,
+            "end": 489,
+            "score": 0.85,
+            "original_value": "This"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 547,
+            "end": 556,
+            "score": 0.85,
+            "original_value": "Consignor"
+          },
+          {
+            "entity_type": "PERSON",
+            "start": 559,
+            "end": 565,
+            "score": 0.85,
+            "original_value": "Sender"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 566,
+            "end": 576,
+            "score": 0.85,
+            "original_value": "B2B PHARMA"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 580,
+            "end": 596,
+            "score": 0.85,
+            "original_value": "rue des Fondeurs"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 597,
+            "end": 608,
+            "score": 0.85,
+            "original_value": "ZI Altitude"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 609,
+            "end": 615,
+            "score": 0.85,
+            "original_value": "France"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 659,
+            "end": 665,
+            "score": 0.85,
+            "original_value": "BOUCAN"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 700,
+            "end": 711,
+            "score": 0.85,
+            "original_value": "Sainte-Rose"
+          },
+          {
+            "entity_type": "PERSON",
+            "start": 903,
+            "end": 906,
+            "score": 0.85,
+            "original_value": "VII"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 922,
+            "end": 928,
+            "score": 0.85,
+            "original_value": "MARPOL"
+          },
+          {
+            "entity_type": "PERSON",
+            "start": 936,
+            "end": 946,
+            "score": 0.85,
+            "original_value": "Annexe lil"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 964,
+            "end": 970,
+            "score": 0.85,
+            "original_value": "Numéro"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 1120,
+            "end": 1128,
+            "score": 0.85,
+            "original_value": "S01883\nC"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 1130,
+            "end": 1139,
+            "score": 0.85,
+            "original_value": "Transport"
+          },
+          {
+            "entity_type": "PERSON",
+            "start": 1274,
+            "end": 1281,
+            "score": 0.85,
+            "original_value": "Carrier"
+          },
+          {
+            "entity_type": "PERSON",
+            "start": 1820,
+            "end": 1828,
+            "score": 0.85,
+            "original_value": "packaged"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 1840,
+            "end": 1842,
+            "score": 0.85,
+            "original_value": "Be"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 1946,
+            "end": 1958,
+            "score": 0.85,
+            "original_value": "Informations"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 2003,
+            "end": 2022,
+            "score": 0.85,
+            "original_value": "Additional handïing"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 2064,
+            "end": 2070,
+            "score": 0.85,
+            "original_value": "Emites"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 2110,
+            "end": 2112,
+            "score": 0.85,
+            "original_value": "Ts"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 2152,
+            "end": 2154,
+            "score": 0.85,
+            "original_value": "DO"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 2166,
+            "end": 2179,
+            "score": 0.85,
+            "original_value": "DE L'EMPOTAGE"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 2240,
+            "end": 2255,
+            "score": 0.85,
+            "original_value": "PACKINGA.OADING"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 2279,
+            "end": 2299,
+            "score": 0.85,
+            "original_value": "Name of company\nLieu"
+          },
+          {
+            "entity_type": "PERSON",
+            "start": 2325,
+            "end": 2347,
+            "score": 0.85,
+            "original_value": "Signature du déclerant"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 2403,
+            "end": 2408,
+            "score": 0.85,
+            "original_value": "Narne"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 2429,
+            "end": 2439,
+            "score": 0.85,
+            "original_value": "CERTIFICAT"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 2493,
+            "end": 2504,
+            "score": 0.85,
+            "original_value": "CERTIFICATE"
+          },
+          {
+            "entity_type": "PERSON",
+            "start": 2560,
+            "end": 2580,
+            "score": 0.85,
+            "original_value": "16 empotéesichargèes"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 2674,
+            "end": 2683,
+            "score": 0.85,
+            "original_value": "COMPLÉTER"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 2720,
+            "end": 2729,
+            "score": 0.85,
+            "original_value": "CONTENEUR"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 2956,
+            "end": 2967,
+            "score": 0.85,
+            "original_value": "RESPONSIBLE"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 3024,
+            "end": 3036,
+            "score": 0.85,
+            "original_value": "ORGANIZATION"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 3037,
+            "end": 3044,
+            "score": 0.85,
+            "original_value": "RECEIPT"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 3374,
+            "end": 3389,
+            "score": 0.85,
+            "original_value": "Name of company"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 3452,
+            "end": 3466,
+            "score": 0.85,
+            "original_value": "B2B PHARMA SAS"
+          },
+          {
+            "entity_type": "PERSON",
+            "start": 3494,
+            "end": 3498,
+            "score": 0.85,
+            "original_value": "Name"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 3519,
+            "end": 3520,
+            "score": 0.85,
+            "original_value": "N"
+          },
+          {
+            "entity_type": "PERSON",
+            "start": 3571,
+            "end": 3580,
+            "score": 0.85,
+            "original_value": "Signature"
+          },
+          {
+            "entity_type": "PERSON",
+            "start": 3610,
+            "end": 3620,
+            "score": 0.85,
+            "original_value": "Maud Harel"
+          },
+          {
+            "entity_type": "PERSON",
+            "start": 3621,
+            "end": 3635,
+            "score": 0.85,
+            "original_value": "Logistique\nLeu"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 3661,
+            "end": 3668,
+            "score": 0.85,
+            "original_value": "TRIGNAC"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 3768,
+            "end": 3773,
+            "score": 0.85,
+            "original_value": "GOODS"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 3861,
+            "end": 3864,
+            "score": 0.85,
+            "original_value": "ONU"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 3962,
+            "end": 3969,
+            "score": 0.85,
+            "original_value": "AÉRONEF"
+          },
+          {
+            "entity_type": "PERSON",
+            "start": 4013,
+            "end": 4017,
+            "score": 0.85,
+            "original_value": "Fons"
+          },
+          {
+            "entity_type": "PERSON",
+            "start": 4021,
+            "end": 4027,
+            "score": 0.85,
+            "original_value": "Numero"
+          },
+          {
+            "entity_type": "PERSON",
+            "start": 4046,
+            "end": 4055,
+            "score": 0.85,
+            "original_value": "Mme HAREL"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 4074,
+            "end": 4083,
+            "score": 0.85,
+            "original_value": "PASSENGER"
+          },
+          {
+            "entity_type": "PERSON",
+            "start": 4109,
+            "end": 4122,
+            "score": 0.85,
+            "original_value": "AIRCRAFT ONLY"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 4128,
+            "end": 4134,
+            "score": 0.85,
+            "original_value": "Navira"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 4209,
+            "end": 4213,
+            "score": 0.85,
+            "original_value": "Port"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 4234,
+            "end": 4259,
+            "score": 0.85,
+            "original_value": "Port/Lieu de déchargement"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 4262,
+            "end": 4266,
+            "score": 0.85,
+            "original_value": "Port"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 4316,
+            "end": 4326,
+            "score": 0.85,
+            "original_value": "GUADELOUPE"
+          },
+          {
+            "entity_type": "PERSON",
+            "start": 4409,
+            "end": 4414,
+            "score": 0.85,
+            "original_value": "Masse"
+          },
+          {
+            "entity_type": "PERSON",
+            "start": 4421,
+            "end": 4426,
+            "score": 0.85,
+            "original_value": "Masse"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 4433,
+            "end": 4439,
+            "score": 0.85,
+            "original_value": "Cubage"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 4445,
+            "end": 4459,
+            "score": 0.85,
+            "original_value": "Shipping marks"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 4543,
+            "end": 4564,
+            "score": 0.85,
+            "original_value": "UN2059 NITROCELLULOSE"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 4575,
+            "end": 4584,
+            "score": 0.85,
+            "original_value": "FLAMMABLE"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 4595,
+            "end": 4597,
+            "score": 0.85,
+            "original_value": "PG"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 4606,
+            "end": 4611,
+            "score": 0.85,
+            "original_value": "C.c.c"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 4613,
+            "end": 4616,
+            "score": 0.85,
+            "original_value": "EMS"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 4833,
+            "end": 4835,
+            "score": 0.85,
+            "original_value": "PG"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 5051,
+            "end": 5108,
+            "score": 0.85,
+            "original_value": "Overpack used\nThis shipment is made up to 1 fireboard box"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 5197,
+            "end": 5254,
+            "score": 0.85,
+            "original_value": "Overpack used\nThis shipment is made up to 1 fireboard box"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 5276,
+            "end": 5277,
+            "score": 0.85,
+            "original_value": "N"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 5312,
+            "end": 5320,
+            "score": 0.85,
+            "original_value": "Numéro(s"
+          },
+          {
+            "entity_type": "PERSON",
+            "start": 5338,
+            "end": 5342,
+            "score": 0.85,
+            "original_value": "Sea/"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 5359,
+            "end": 5363,
+            "score": 0.85,
+            "original_value": "Tare"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 5755,
+            "end": 5774,
+            "score": 0.85,
+            "original_value": "Marine polluant and"
+          },
+          {
+            "entity_type": "PHONE_NUMBER",
+            "start": 184,
+            "end": 198,
+            "score": 0.4,
+            "original_value": "01 61 44 14 20"
+          },
+          {
+            "entity_type": "PHONE_NUMBER",
+            "start": 207,
+            "end": 221,
+            "score": 0.4,
+            "original_value": "01 61 44 14 29"
+          },
+          {
+            "entity_type": "PHONE_NUMBER",
+            "start": 4056,
+            "end": 4073,
+            "score": 0.4,
+            "original_value": "+33 6 13 84 01 80"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "file": "log_6a61c58ccb565-0.pdf",
+    "pages": [
+      {
+        "page_number": 1,
+        "extraction": {
+          "source": "native_text",
+          "engine": "pdftotext",
+          "char_count": 2202
+        },
+        "classification": {
+          "document_type": "delivery_note",
+          "confidence": 0.62,
+          "score": 18,
+          "second_score": 11
+        },
+        "anonymized_text": " [ORGANIZATION_5]\n 11 [LOCATION_6], [LOCATION_5]\n 44570 [ORGANIZATION_4], [PERSON_2] de livraison :\n 56880 - PHARMACIE DE LA PROVIDENCE\n 1 boulevard de la [LOCATION_4]\n SAINT [PERSON_1] 97400\n [LOCATION_3]\n  [PHONE_NUMBER_2]\nBON DE LIVRAISON RE/OUT/00082\nCommande Date d'expédition\nS02893 23/07/2026\n[ORGANIZATION_3] LOT LIVRÉ PRIX UNITAIRE MONTANT\nPRESENTOIR-KIDS - PRESENTOIR VIDE PLV comptoir KIDS MY VARIATIONS RE/ X 1 0,00 0,00 €\n[LOCATION_2] - PRESENTOIR VIDE PLV sol MY VARIATIONS RE/ X 1 0,00 0,00 €\n Total 0,00 €\n [ORGANIZATION_2] - SAS au capital de 150000 € - SIRET 80217387200028 - APE - N° TVA FR31802173872 - Tél [PHONE_NUMBER_1]\n Coordonnées bancaires : [LOCATION_1] - FR76 1470 6001 9773 9429 2388 816 - BIC AGRIFRPP847\n Distribution certifiée par [ORGANIZATION_1] FR-BIO-01\n RE/OUT/00082 - Page 1 / 1\n\f",
+        "dispatch_preview": {
+          "provider": "(non configuré)",
+          "instruction": "Extraire les lignes de livraison (référence, quantité) et le statut de livraison.",
+          "document_type": "delivery_note",
+          "confidence": 0.62,
+          "content_sent": " [ORGANIZATION_5]\n 11 [LOCATION_6], [LOCATION_5]\n 44570 [ORGANIZATION_4], [PERSON_2] de livraison :\n 56880 - PHARMACIE DE LA PROVIDENCE\n 1 boulevard de la [LOCATION_4]\n SAINT [PERSON_1] 97400\n [LOCATION_3]\n  [PHONE_NUMBER_2]\nBON DE LIVRAISON RE/OUT/00082\nCommande Date d'expédition\nS02893 23/07/2026\n[ORGANIZATION_3] LOT LIVRÉ PRIX UNITAIRE MONTANT\nPRESENTOIR-KIDS - PRESENTOIR VIDE PLV comptoir KIDS MY VARIATIONS RE/ X 1 0,00 0,00 €\n[LOCATION_2] - PRESENTOIR VIDE PLV sol MY VARIATIONS RE/ X 1 0,00 0,00 €\n Total 0,00 €\n [ORGANIZATION_2] - SAS au capital de 150000 € - SIRET 80217387200028 - APE - N° TVA FR31802173872 - Tél [PHONE_NUMBER_1]\n Coordonnées bancaires : [LOCATION_1] - FR76 1470 6001 9773 9429 2388 816 - BIC AGRIFRPP847\n Distribution certifiée par [ORGANIZATION_1] FR-BIO-01\n RE/OUT/00082 - Page 1 / 1\n\f",
+          "note": "STUB - aucun appel réseau réel effectué."
+        },
+        "_local_only_entity_mapping": {
+          "[ORGANIZATION_1]": "ecocert",
+          "[LOCATION_1]": "ca st nazaire",
+          "[PHONE_NUMBER_1]": "02 40 61 60 83",
+          "[ORGANIZATION_2]": "b2b pharma",
+          "[LOCATION_2]": "presentoir-sol",
+          "[ORGANIZATION_3]": "produit",
+          "[PHONE_NUMBER_2]": "02 62 21 88 04",
+          "[LOCATION_3]": "la réunion",
+          "[PERSON_1]": "denis",
+          "[LOCATION_4]": "providence",
+          "[PERSON_2]": "france\n adresse",
+          "[ORGANIZATION_4]": "trignac",
+          "[LOCATION_5]": "zi altitude",
+          "[LOCATION_6]": "rue des fondeurs",
+          "[ORGANIZATION_5]": "b2b pharma sas"
+        },
+        "_local_only_entities_detected": [
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 1,
+            "end": 15,
+            "score": 0.85,
+            "original_value": "B2B PHARMA SAS"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 20,
+            "end": 36,
+            "score": 0.85,
+            "original_value": "rue des Fondeurs"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 38,
+            "end": 49,
+            "score": 0.85,
+            "original_value": "ZI Altitude"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 57,
+            "end": 64,
+            "score": 0.85,
+            "original_value": "TRIGNAC"
+          },
+          {
+            "entity_type": "PERSON",
+            "start": 66,
+            "end": 81,
+            "score": 0.85,
+            "original_value": "FRANCE\n Adresse"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 152,
+            "end": 162,
+            "score": 0.85,
+            "original_value": "Providence"
+          },
+          {
+            "entity_type": "PERSON",
+            "start": 170,
+            "end": 175,
+            "score": 0.85,
+            "original_value": "DENIS"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 183,
+            "end": 193,
+            "score": 0.85,
+            "original_value": "La Réunion"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 287,
+            "end": 294,
+            "score": 0.85,
+            "original_value": "PRODUIT"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 413,
+            "end": 427,
+            "score": 0.85,
+            "original_value": "PRESENTOIR-SOL"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 503,
+            "end": 513,
+            "score": 0.85,
+            "original_value": "B2B PHARMA"
+          },
+          {
+            "entity_type": "LOCATION",
+            "start": 641,
+            "end": 654,
+            "score": 0.85,
+            "original_value": "CA St Nazaire"
+          },
+          {
+            "entity_type": "ORGANIZATION",
+            "start": 737,
+            "end": 744,
+            "score": 0.85,
+            "original_value": "ECOCERT"
+          },
+          {
+            "entity_type": "PHONE_NUMBER",
+            "start": 197,
+            "end": 211,
+            "score": 0.4,
+            "original_value": "02 62 21 88 04"
+          },
+          {
+            "entity_type": "PHONE_NUMBER",
+            "start": 601,
+            "end": 615,
+            "score": 0.4,
+            "original_value": "02 40 61 60 83"
+          }
+        ]
+      }
+    ]
+  }
+]
