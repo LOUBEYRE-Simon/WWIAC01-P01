@@ -63,6 +63,7 @@ require_once __DIR__ . '/pipeline_orchestrator.php';
 header('Content-Type: application/json');
 
 $requestStart = microtime(true);
+$requestStartedAt = iso_timestamp($requestStart);
 $fid = $_GET['fid'] ?? null;
 $model = $_GET['model'] ?? null;
 $ollamaUrl = $_GET['ollama_url'] ?? null;
@@ -75,6 +76,7 @@ if (!$ficParam) {
         'status' => 'error',
         'error' => "Paramètre 'fic' manquant",
         'fid' => $fid,
+        'request_started_at' => $requestStartedAt,
         'request_duration_ms' => round((microtime(true) - $requestStart) * 1000),
     ], JSON_UNESCAPED_UNICODE);
     exit;
@@ -87,6 +89,7 @@ if ($pdfUrl === false || !filter_var($pdfUrl, FILTER_VALIDATE_URL)) {
         'status' => 'error',
         'error' => "Paramètre 'fic' invalide : base64 non décodable ou URL malformée une fois décodée",
         'fid' => $fid,
+        'request_started_at' => $requestStartedAt,
         'request_duration_ms' => round((microtime(true) - $requestStart) * 1000),
     ], JSON_UNESCAPED_UNICODE);
     exit;
@@ -96,6 +99,7 @@ $logs = [];
 try {
     $result = process_document($pdfUrl, $logs, $model, $ollamaUrl, $skipLines);
     $result['fid'] = $fid;
+    $result['request_started_at'] = $requestStartedAt;
     $result['request_duration_ms'] = round((microtime(true) - $requestStart) * 1000);
     echo json_encode($result, JSON_UNESCAPED_UNICODE);
 } catch (Throwable $e) {
@@ -110,6 +114,7 @@ try {
         // disponible ici. Ajouté après un cas réel où une erreur de timeout ne
         // permettait plus de savoir a posteriori quel modèle était en cause.
         'model' => $model,
+        'request_started_at' => $requestStartedAt,
         'request_duration_ms' => round((microtime(true) - $requestStart) * 1000),
         // Logs partiels accumulés avant l'échec fatal (fetch_pdf ou step1
         // typiquement) - process_document() écrit dans $logs par référence

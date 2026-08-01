@@ -170,6 +170,21 @@ function call_python_step(string $scriptName, array $input, int $timeoutSec): ar
 
 
 // ---------------------------------------------------------------------
+// Horodatage lisible (ISO 8601, millisecondes, fuseau local du serveur) à
+// partir d'un timestamp microtime(true) - utilisé pour dater le début de
+// chaque étape dans les logs, et le début global du traitement.
+// ---------------------------------------------------------------------
+function iso_timestamp(float $unixTime): string
+{
+    $whole = (int) floor($unixTime);
+    $millis = (int) round(($unixTime - $whole) * 1000);
+    $dt = new DateTime('@' . $whole);
+    $dt->setTimezone(new DateTimeZone(date_default_timezone_get()));
+    return $dt->format('Y-m-d\TH:i:s') . sprintf('.%03d', $millis) . $dt->format('P');
+}
+
+
+// ---------------------------------------------------------------------
 // Mesure de durée + journalisation uniforme, pour n'importe quel appel
 // (fetch_pdf_from_url, call_python_step...). Enregistre systématiquement
 // une entrée dans $logs (succès ou échec) puis relance l'exception s'il y
@@ -192,6 +207,7 @@ function timed_call(array &$logs, string $label, callable $fn, ?int $pageNumber 
         $logs[] = [
             'step' => $label,
             'page_number' => $pageNumber,
+            'started_at' => iso_timestamp($t0),
             'status' => $status,
             'duration_ms' => round((microtime(true) - $t0) * 1000),
             'error' => $errorMessage,
@@ -233,6 +249,7 @@ function process_document(
     bool $skipLines = false
 ): array {
     $globalStart = microtime(true);
+    $globalStartedAt = iso_timestamp($globalStart);
 
     // Surcharge du modèle/serveur Ollama utilisé par step5/step6 - permet de
     // comparer manuellement plusieurs modèles (un autre SLM, voire un LLM
@@ -429,6 +446,7 @@ function process_document(
 
         return [
             'status' => 'ok',
+            'started_at' => $globalStartedAt,
             'duration_ms' => round((microtime(true) - $globalStart) * 1000),
             'model' => $modelUsed,
             'nb_pages' => $nbPages,
