@@ -57,13 +57,22 @@ define('WORK_DIR', sys_get_temp_dir());
 // Presidio (dont ~4-5s de démarrage spaCy), et un Ollama vision-langage 8B
 // qui peut prendre plusieurs dizaines de secondes selon le matériel - à
 // mesurer avec le vrai modèle avant de figer ces valeurs.
+// header/lines relevés de 120s à 240s pendant la phase de comparaison de
+// modèles : on teste volontairement des modèles plus gros que le SLM initial
+// (gemma4:e4b a mesuré 116,8s à froid, deepseek-r1:8b a dépassé 120s) - un
+// changement de modèle Ollama recharge tout en mémoire (~50s+ mesurés), et un
+// modèle de raisonnement (deepseek-r1) génère en plus une chaîne de "réflexion"
+// avant sa réponse finale, ce qui allonge encore le temps même sans recharge.
+// À redescendre à une valeur stricte une fois le modèle définitif choisi pour
+// la prod - un timeout aussi long immobiliserait un worker PHP en cas de
+// vrai blocage, pas seulement de lenteur.
 const STEP_TIMEOUTS = [
     'split'     => 10,
     'extract'   => 60,
     'anonymize' => 30,
     'classify'  => 15,
-    'header'    => 120,
-    'lines'     => 120,
+    'header'    => 240,
+    'lines'     => 240,
 ];
 
 // minicpm-v4.5 est un SLM (small language model) : fenêtre de contexte

@@ -104,6 +104,12 @@ try {
         'status' => 'error',
         'error' => $e->getMessage(),
         'fid' => $fid,
+        // Le modèle demandé (paramètre GET) - à défaut de pouvoir renvoyer le
+        // modèle "résolu" par step5 (jamais reçu si l'étape échoue avant
+        // d'avoir répondu, cas typique d'un timeout), c'est la seule valeur
+        // disponible ici. Ajouté après un cas réel où une erreur de timeout ne
+        // permettait plus de savoir a posteriori quel modèle était en cause.
+        'model' => $model,
         'request_duration_ms' => round((microtime(true) - $requestStart) * 1000),
         // Logs partiels accumulés avant l'échec fatal (fetch_pdf ou step1
         // typiquement) - process_document() écrit dans $logs par référence
