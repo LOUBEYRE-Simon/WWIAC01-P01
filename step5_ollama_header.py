@@ -57,9 +57,22 @@ HEADER_FIELD_HINTS = {
         "nom de l'entité qui reçoit la marchandise et/ou la facture - "
         "peut y avoir une adresse de facturation et une adresse de livraison distinctes"
     ),
-    "destinataire_adresse": "adresse(s) du destinataire (facturation et/ou livraison si distinctes)",
+    "destinataire_adresse": (
+        "adresse(s) du destinataire (facturation et/ou livraison si distinctes). "
+        "Une adresse complète inclut la ville ET le code postal, pas seulement "
+        "la rue - si ces informations apparaissent ailleurs dans le texte pour "
+        "la même entité (même si sur une autre ligne ou dans un autre bloc), "
+        "inclus-les dans la valeur renvoyée plutôt que de t'arrêter à la rue."
+    ),
     "numero_document": "numéro de la facture/du document (ex: 'Facture: 91036701', 'N° de facture')",
-    "date_document": "date d'émission du document (ex: 'Date de facture')",
+    "date_document": (
+        "date d'émission du document (ex: 'Date de facture'). Peut aussi "
+        "apparaître SANS libellé explicite, sous la forme d'une mention "
+        "traditionnelle de courrier français 'Ville, le JJ/MM/AA' (ex: "
+        "'Labège, le 30/07/26') placée près de l'adresse de l'émetteur - "
+        "cette forme est aussi valable que 'Date de facture' si aucune autre "
+        "date n'est explicitement labellisée comme date d'émission."
+    ),
     "reference_commande": (
         "référence de la commande PASSÉE PAR LE CLIENT - PAS un code article, "
         "PAS un numéro de bordereau/BL, PAS un code client. Peut apparaître "
