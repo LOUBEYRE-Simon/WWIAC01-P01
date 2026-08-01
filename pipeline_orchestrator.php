@@ -30,6 +30,17 @@
  * (voir functions.php pour les conventions déjà en place, ex: préfixe sNN_).
  * Chemins des scripts, gestion des erreurs par étape, et politique de
  * parallélisation (une page à la fois ici, par simplicité) sont à ajuster.
+ *
+ * Informations de contrôle (ajout) : process_document() mesure désormais la
+ * durée de chaque étape (fetch, split, extraction, anonymisation,
+ * classification, Ollama) via timed_call(), et renvoie :
+ *   - "duration_ms" : durée totale du traitement
+ *   - "logs"        : détail étape par étape (script, n° de page le cas
+ *     échéant, statut, durée en ms, message d'erreur éventuel)
+ * $logs est aussi passé par référence à process_document() : même si une
+ * étape fatale (fetch du PDF, split) lève une exception et interrompt le
+ * traitement, l'appelant récupère quand même les logs déjà accumulés
+ * jusque-là (voir test_get_endpoint.php pour l'utilisation de ce paramètre).
  */
 
 // ---------------------------------------------------------------------
@@ -118,6 +129,37 @@ function call_python_step(string $scriptName, array $input, int $timeoutSec): ar
 
 
 // ---------------------------------------------------------------------
+// Mesure de durée + journalisation uniforme, pour n'importe quel appel
+// (fetch_pdf_from_url, call_python_step...). Enregistre systématiquement
+// une entrée dans $logs (succès ou échec) puis relance l'exception s'il y
+// en a une, pour ne rien changer au flux de contrôle existant (page
+// ignorée en cas d'erreur, etc.) - seule la journalisation est ajoutée.
+// ---------------------------------------------------------------------
+function timed_call(array &$logs, string $label, callable $fn, ?int $pageNumber = null)
+{
+    $t0 = microtime(true);
+    $status = 'ok';
+    $errorMessage = null;
+    try {
+        $result = $fn();
+        return $result;
+    } catch (Throwable $e) {
+        $status = 'error';
+        $errorMessage = $e->getMessage();
+        throw $e;
+    } finally {
+        $logs[] = [
+            'step' => $label,
+            'page_number' => $pageNumber,
+            'status' => $status,
+            'duration_ms' => round((microtime(true) - $t0) * 1000),
+            'error' => $errorMessage,
+        ];
+    }
+}
+
+
+// ---------------------------------------------------------------------
 // Étape 0 (implicite) : récupération du fichier source par URL
 // ---------------------------------------------------------------------
 function fetch_pdf_from_url(string $url): string
@@ -142,13 +184,19 @@ function fetch_pdf_from_url(string $url): string
 // ---------------------------------------------------------------------
 // Orchestration complète pour un document
 // ---------------------------------------------------------------------
-function process_document(string $pdfUrl): array
+function process_document(string $pdfUrl, array &$logs = []): array
 {
-    $pdfPath = fetch_pdf_from_url($pdfUrl);
+    $globalStart = microtime(true);
+
+    $pdfPath = timed_call($logs, 'fetch_pdf', function () use ($pdfUrl) {
+        return fetch_pdf_from_url($pdfUrl);
+    });
 
     try {
         // Étape 1 : nombre de pages
-        $split = call_python_step('step1_split_pdf.py', ['pdf_path' => $pdfPath], STEP_TIMEOUTS['split']);
+        $split = timed_call($logs, 'step1_split_pdf.py', function () use ($pdfPath) {
+            return call_python_step('step1_split_pdf.py', ['pdf_path' => $pdfPath], STEP_TIMEOUTS['split']);
+        });
         $nbPages = $split['nb_pages'];
 
         $pages = [];
@@ -160,22 +208,24 @@ function process_document(string $pdfUrl): array
         for ($pageNumber = 1; $pageNumber <= $nbPages; $pageNumber++) {
             try {
                 // Étape 2 : extraction du texte (pdftotext, sinon OCR)
-                $extraction = call_python_step('step2_extract_page.py', [
-                    'pdf_path' => $pdfPath,
-                    'page_number' => $pageNumber,
-                ], STEP_TIMEOUTS['extract']);
+                $extraction = timed_call($logs, 'step2_extract_page.py', function () use ($pdfPath, $pageNumber) {
+                    return call_python_step('step2_extract_page.py', [
+                        'pdf_path' => $pdfPath,
+                        'page_number' => $pageNumber,
+                    ], STEP_TIMEOUTS['extract']);
+                }, $pageNumber);
 
                 $rawText = $extraction['text'];
 
                 // Étape 3 : anonymisation (trace/audit - pas sur le chemin Ollama)
-                $anonymization = call_python_step('step3_anonymize.py', [
-                    'text' => $rawText,
-                ], STEP_TIMEOUTS['anonymize']);
+                $anonymization = timed_call($logs, 'step3_anonymize.py', function () use ($rawText) {
+                    return call_python_step('step3_anonymize.py', ['text' => $rawText], STEP_TIMEOUTS['anonymize']);
+                }, $pageNumber);
 
                 // Étape 4 : classification du type de document
-                $classification = call_python_step('step4_classify.py', [
-                    'text' => $rawText,
-                ], STEP_TIMEOUTS['classify']);
+                $classification = timed_call($logs, 'step4_classify.py', function () use ($rawText) {
+                    return call_python_step('step4_classify.py', ['text' => $rawText], STEP_TIMEOUTS['classify']);
+                }, $pageNumber);
 
                 $pages[] = [
                     'page_number' => $pageNumber,
@@ -202,19 +252,23 @@ function process_document(string $pdfUrl): array
                 // présent sur la première page seulement, donc un seul appel
                 // suffit. Ajuster si le format réel varie.
                 if ($pageNumber === 1) {
-                    $headerResult = call_python_step('step5_ollama_header.py', [
-                        'text' => $rawText,
-                        'document_type' => $classification['document_type'],
-                    ], STEP_TIMEOUTS['header']);
+                    $headerResult = timed_call($logs, 'step5_ollama_header.py', function () use ($rawText, $classification) {
+                        return call_python_step('step5_ollama_header.py', [
+                            'text' => $rawText,
+                            'document_type' => $classification['document_type'],
+                        ], STEP_TIMEOUTS['header']);
+                    }, $pageNumber);
                     $header = $headerResult['header'];
                 }
 
                 // Étape 6 (conditionnelle) : lignes de détail, potentiellement
                 // réparties sur plusieurs pages -> on agrège au fil des pages.
-                $linesResult = call_python_step('step6_ollama_lines.py', [
-                    'text' => $rawText,
-                    'document_type' => $classification['document_type'],
-                ], STEP_TIMEOUTS['lines']);
+                $linesResult = timed_call($logs, 'step6_ollama_lines.py', function () use ($rawText, $classification) {
+                    return call_python_step('step6_ollama_lines.py', [
+                        'text' => $rawText,
+                        'document_type' => $classification['document_type'],
+                    ], STEP_TIMEOUTS['lines']);
+                }, $pageNumber);
 
                 if (!($linesResult['skipped'] ?? false)) {
                     $allLines = array_merge($allLines, $linesResult['lines']);
@@ -233,12 +287,14 @@ function process_document(string $pdfUrl): array
 
         return [
             'status' => 'ok',
+            'duration_ms' => round((microtime(true) - $globalStart) * 1000),
             'nb_pages' => $nbPages,
             'document_type' => $documentType,
             'document_type_confidence' => $documentTypeConfidence,
             'header' => $header,
             'lines' => $allLines,
             'pages' => $pages,
+            'logs' => $logs,
         ];
 
     } finally {

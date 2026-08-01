@@ -85,6 +85,25 @@ Le round-trip base64 → décodage → `wget` → découpage → extraction → 
 
 **Réservé aux tests, pas à la production** : le base64 n'est pas un chiffrement (URL/nom de fichier lisibles dans les logs d'accès, l'historique navigateur, les caches), et un GET est plus facilement mis en cache ou rejoué qu'un POST. Pour la production, préférer un vrai POST JSON (exemple en bas de `pipeline_orchestrator.php`).
 
+## Informations de contrôle : durée, logs, `fid`
+
+`process_document()` (dans `pipeline_orchestrator.php`) mesure maintenant la durée de chaque étape via un wrapper `timed_call()`, et la réponse inclut :
+
+- `duration_ms` : durée totale du traitement interne.
+- `logs` : un tableau, une entrée par appel (`fetch_pdf`, `step1_split_pdf.py`, puis par page `step2` à `step6`), chacune avec `step`, `page_number` (null si non applicable), `status` (`ok`/`error`), `duration_ms`, `error`. Ces logs sont capturés même en cas d'échec fatal (fetch ou split) grâce au passage de `$logs` par référence à `process_document()`.
+
+`test_get_endpoint.php` ajoute par-dessus :
+
+- `fid` : identifiant de suivi fourni par l'appelant en GET (`?fid=XXXXXX`), renvoyé tel quel dans la réponse pour confirmation/corrélation.
+- `request_duration_ms` : durée totale de la requête HTTP (décodage du `fic` inclus), un peu plus large que `duration_ms`.
+
+Exemple d'appel :
+```
+test_get_endpoint.php?fic=<url_en_base64>&fid=ABC123
+```
+
+**Point non vérifiable dans cet environnement de prototypage** : ces modifications touchent uniquement `pipeline_orchestrator.php`/`test_get_endpoint.php` (pas les scripts Python, déjà testés en conditions réelles). Comme lors de l'ajout précédent, aucun interpréteur PHP n'a pu être installé ici pour les rejouer - relecture manuelle attentive de la syntaxe (fermetures, passage par référence, `finally`), mais un `php -l` côté serveur avant déploiement reste recommandé.
+
 ## Dépendances à installer
 
 ```
