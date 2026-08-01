@@ -42,7 +42,15 @@ SYSTEM_PROMPT = (
 HEADER_FIELD_HINTS = {
     "emetteur_nom": (
         "nom de l'entité qui émet/facture le document - souvent en pied de "
-        "page, éventuellement après une mention 'Nom Commercial :'"
+        "page, éventuellement après une mention 'Nom Commercial :'. ATTENTION : "
+        "un document peut afficher PLUSIEURS noms d'entreprise différents (ex: "
+        "une marque commerciale ou un nom de gamme de produits en haut de page, "
+        "et la raison sociale légale en pied de page avec SIRET/TVA/IBAN/RIB). "
+        "Dans ce cas, c'est TOUJOURS l'entité identifiable par un SIRET, un "
+        "numéro de TVA, ou des coordonnées bancaires (IBAN/RIB) qui est "
+        "l'émetteur réel - ne renvoie JAMAIS null pour ce champ si une telle "
+        "entité est présente dans le texte, même si un autre nom apparaît "
+        "ailleurs et te semble plus visible ou plus proche du début du texte."
     ),
     "emetteur_adresse": "adresse de l'émetteur",
     "destinataire_nom": (
@@ -56,7 +64,8 @@ HEADER_FIELD_HINTS = {
         "référence de la commande PASSÉE PAR LE CLIENT - PAS un code article, "
         "PAS un numéro de bordereau/BL, PAS un code client. Peut apparaître "
         "sous des libellés variés : 'Votre référence', 'Numéro de commande', "
-        "'N° de commande', 'Numéro d'engagement', 'PO number', 'Order reference'."
+        "'N° de commande', 'Commande client n°', 'Numéro d'engagement', "
+        "'PO number', 'Order reference'."
     ),
     "devise": "devise du montant total (ex: EUR, USD)",
     "montant_total": "montant total du document (ex: 'Total TTC', 'Valeur totale', 'Net à payer')",
