@@ -16,6 +16,11 @@ import requests
 
 DEFAULT_OLLAMA_URL = "http://localhost:11434"
 DEFAULT_MODEL = "minicpm-v4.5:latest"
+# Tâche d'extraction structurée, pas de génération créative : une température
+# basse réduit la variabilité d'un appel à l'autre sur un même texte (observé
+# en usage réel - un champ correctement extrait dans un appel revenait à null
+# dans un appel suivant, prompt strictement identique par ailleurs).
+DEFAULT_TEMPERATURE = 0.1
 
 # Repère un bloc ```json ... ``` ou ``` ... ``` entourant tout le message.
 _FENCE_RE = re.compile(r"^```(?:json)?\s*(.*?)\s*```$", re.DOTALL | re.IGNORECASE)
@@ -72,11 +77,16 @@ def call_ollama_json(
     model: str = DEFAULT_MODEL,
     base_url: str = DEFAULT_OLLAMA_URL,
     timeout: int = 120,
+    temperature: float = DEFAULT_TEMPERATURE,
 ) -> dict:
     """
     Appelle Ollama en mode chat en exigeant une réponse JSON stricte
     (format="json" - contrainte native de l'API Ollama qui force le modèle
     à produire un JSON syntaxiquement valide). Renvoie le dict déjà parsé.
+
+    temperature basse par défaut (voir DEFAULT_TEMPERATURE) : on veut une
+    extraction reproductible d'un appel à l'autre sur un même document, pas
+    de la créativité.
 
     Lève OllamaError avec un message explicite si : Ollama n'est pas
     joignable, timeout dépassé, code HTTP d'erreur, ou réponse qui n'est
@@ -95,6 +105,7 @@ def call_ollama_json(
                 "messages": messages,
                 "format": "json",
                 "stream": False,
+                "options": {"temperature": temperature},
             },
             timeout=timeout,
         )
