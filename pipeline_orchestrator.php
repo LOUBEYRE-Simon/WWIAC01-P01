@@ -254,7 +254,7 @@ function process_document(string $pdfUrl): array
 // ---------------------------------------------------------------------
 // Exemple de point d'entrée HTTP (à adapter au framework/routing existant)
 // ---------------------------------------------------------------------
-$input = json_decode(file_get_contents('php://input'), true);
-$result = process_document($input['pdf_url']);
-header('Content-Type: application/json');
-echo json_encode($result, JSON_UNESCAPED_UNICODE);
+// $input = json_decode(file_get_contents('php://input'), true);
+// $result = process_document($input['pdf_url']);
+// header('Content-Type: application/json');
+// echo json_encode($result, JSON_UNESCAPED_UNICODE);
