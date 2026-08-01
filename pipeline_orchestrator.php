@@ -254,8 +254,10 @@ function process_document(
         $documentTypeConfidence = 0.0;
         $header = null;
         $allLines = [];
-        $allRawText = []; // texte de chaque page correctement extraite, pour l'étape 5 (voir plus bas)
+        $allRawText = [];    // texte de chaque page correctement extraite, pour l'étape 5 (voir plus bas)
+        $successfulPages = []; // [['page_number' => N, 'raw_text' => '...'], ...] - alimente la 2e passe (step6)
 
+        // --- Passe 1 : extraction + anonymisation + classification, page par page ---
         for ($pageNumber = 1; $pageNumber <= $nbPages; $pageNumber++) {
             try {
                 // Étape 2 : extraction du texte (pdftotext, sinon OCR)
@@ -294,28 +296,14 @@ function process_document(
 
                 // On retient le type de document le plus confiant du lot comme
                 // type global (hypothèse simplificatrice : à affiner si le PDF
-                // mélange plusieurs types de documents sur des pages différentes).
+                // mélange vraiment plusieurs types de documents sur des pages
+                // différentes - ici, on assume un seul type par document).
                 if ($documentType === null || $classification['confidence'] > $documentTypeConfidence) {
                     $documentType = $classification['document_type'];
                     $documentTypeConfidence = $classification['confidence'];
                 }
 
-                // Étape 6 (conditionnelle) : lignes de détail, potentiellement
-                // réparties sur plusieurs pages -> on agrège au fil des pages.
-                // Texte plafonné (voir HEADER_TEXT_MAX_CHARS/LINES_TEXT_MAX_CHARS
-                // en tête de fichier) - le modèle est un SLM à ~40K tokens de
-                // contexte, pas de marge pour envoyer une page entière sans limite.
-                $linesInputText = truncate_for_context($rawText, LINES_TEXT_MAX_CHARS);
-                $linesResult = timed_call($logs, 'step6_ollama_lines.py', function () use ($linesInputText, $classification, $ollamaOverrides) {
-                    return call_python_step('step6_ollama_lines.py', array_merge([
-                        'text' => $linesInputText,
-                        'document_type' => $classification['document_type'],
-                    ], $ollamaOverrides), STEP_TIMEOUTS['lines']);
-                }, $pageNumber);
-
-                if (!($linesResult['skipped'] ?? false)) {
-                    $allLines = array_merge($allLines, $linesResult['lines']);
-                }
+                $successfulPages[] = ['page_number' => $pageNumber, 'raw_text' => $rawText];
 
             } catch (Throwable $pageError) {
                 // Une page en échec ne doit pas faire échouer tout le document -
@@ -325,6 +313,40 @@ function process_document(
                     'page_number' => $pageNumber,
                     'error' => $pageError->getMessage(),
                 ];
+            }
+        }
+
+        // --- Passe 2 : lignes de détail (step6), avec le type de document GLOBAL ---
+        // Correction suite à un cas réel : sur un document de 2 pages classées
+        // différemment (page 1 "invoice" à 0.62, page 2 "packing_list" à 0.6),
+        // step6 utilisait le type de CHAQUE page pour choisir le schéma de
+        // champs à demander au modèle -> le tableau "lines" final mélangeait
+        // deux schémas différents (designation/prix_unitaire sur certaines
+        // lignes, numero_colis/poids_brut sur d'autres), pas exploitable tel
+        // quel. Utiliser le type global (déterminé après la passe 1, une fois
+        // toutes les pages classées) garantit un schéma de champs uniforme sur
+        // tout le document.
+        foreach ($successfulPages as $successfulPage) {
+            $pageNumber = $successfulPage['page_number'];
+            $rawText = $successfulPage['raw_text'];
+            try {
+                // Texte plafonné (voir HEADER_TEXT_MAX_CHARS/LINES_TEXT_MAX_CHARS
+                // en tête de fichier) - le modèle est un SLM à ~40K tokens de
+                // contexte, pas de marge pour envoyer une page entière sans limite.
+                $linesInputText = truncate_for_context($rawText, LINES_TEXT_MAX_CHARS);
+                $linesResult = timed_call($logs, 'step6_ollama_lines.py', function () use ($linesInputText, $documentType, $ollamaOverrides) {
+                    return call_python_step('step6_ollama_lines.py', array_merge([
+                        'text' => $linesInputText,
+                        'document_type' => $documentType,
+                    ], $ollamaOverrides), STEP_TIMEOUTS['lines']);
+                }, $pageNumber);
+
+                if (!($linesResult['skipped'] ?? false)) {
+                    $allLines = array_merge($allLines, $linesResult['lines']);
+                }
+            } catch (Throwable $lineError) {
+                // Idem : une page en échec sur step6 ne doit pas faire perdre
+                // les lignes des autres pages. Déjà journalisé par timed_call.
             }
         }
 
