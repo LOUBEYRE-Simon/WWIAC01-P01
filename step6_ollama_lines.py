@@ -48,15 +48,42 @@ LINE_FIELDS_BY_TYPE = {
 }
 
 
+# Exemple de mise en page OCR fragmentée observé en pratique : les 4 informations
+# d'une même ligne d'article (référence, prix unitaire, montant, quantité) sont
+# parfois éclatées sur 3-4 lignes de texte distinctes, séparées par un simple
+# numéro de ligne interne ("Ligne000010") qui n'est PAS une référence article.
+# Ajouté après un cas réel où le modèle prenait "Ligne000010" pour reference_article
+# et décalait ensuite tous les champs suivants d'une position (prix pris pour
+# quantité, montant pris pour prix unitaire, montant_ligne renvoyé à null alors
+# que la valeur était bien présente dans le texte, juste mal affectée).
+FRAGMENTED_LAYOUT_EXAMPLE = (
+    "\n\nExemple de mise en page fragmentée que tu peux rencontrer, avec le bon "
+    "regroupement des informations qui appartiennent à UN SEUL article :\n---\n"
+    "123456               10  CAR    Nom du produit exemple\n\n"
+    "Ligne000030\n\n"
+    "15,00                                   1            150,00\n"
+    "1.000 Pce\n"
+    "---\n"
+    "Ici, malgré l'éclatement sur plusieurs lignes, il s'agit d'un seul article : "
+    "\"123456\" est reference_article (PAS \"Ligne000030\", qui est un simple "
+    "numéro de ligne interne à ignorer comme référence), \"10\" (à côté du code "
+    "article) est la quantité à retenir pour quantite, \"15,00\" (avant le \"1\") "
+    "est prix_unitaire, et \"150,00\" (juste après ce \"1\") est montant_ligne - "
+    "recopié tel quel, jamais recalculé."
+)
+
+
 def build_prompt(text: str, document_type: str) -> str:
     fields = LINE_FIELDS_BY_TYPE.get(document_type, ["designation", "quantite", "montant_ligne"])
     fields_list = ", ".join(fields)
+    example = FRAGMENTED_LAYOUT_EXAMPLE if "montant_ligne" in fields and "prix_unitaire" in fields else ""
     return (
         f"Type de document : {document_type}.\n\n"
         f"Texte du document (extrait par OCR ou pdftotext, la mise en page peut "
         f"être imparfaite) :\n---\n{text}\n---\n\n"
         f"Extrait chaque ligne de détail sous forme d'objet JSON avec exactement "
         f"ces clés : {fields_list}. Renvoie {{\"lines\": [...]}}."
+        f"{example}"
     )
 
 
