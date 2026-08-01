@@ -35,7 +35,7 @@
 // ---------------------------------------------------------------------
 // Configuration
 // ---------------------------------------------------------------------
-
+ 
 define('PYTHON_BIN', 'python3');
 define('SCRIPTS_DIR', __DIR__); // dossier contenant les step*_*.py
 define('WORK_DIR', sys_get_temp_dir());
