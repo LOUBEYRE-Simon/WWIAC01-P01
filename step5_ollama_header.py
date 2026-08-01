@@ -134,6 +134,14 @@ HEADER_FIELD_HINTS = {
         "sous des libellés variés : 'Votre référence', 'Numéro de commande', "
         "'N° de commande', 'Commande client n°', 'Numéro d'engagement', "
         "'N° BON DE CDE', 'Bon de commande', 'PO number', 'Order reference'. "
+        "Peut aussi apparaître sous le seul mot 'REFERENCE' (sans 'Votre'/"
+        "'commande'), mais UNIQUEMENT dans un petit bloc d'en-tête à 3 "
+        "colonnes du type 'NUMERO | DATE | REFERENCE' (identifiants du "
+        "document, proche du numéro de facture et de sa date) - jamais si "
+        "'REFERENCE' est la colonne d'un tableau de lignes d'articles à "
+        "plusieurs colonnes (Désignation/Qté/Prix/Montant...), où elle "
+        "désigne alors un code produit et ne doit PAS être utilisée comme "
+        "référence de commande. "
         "EXCLUS explicitement : 'Livraison "
         "client n°', 'Préparation livraison n°' - ce sont des références de "
         "livraison, pas la référence de commande du client, même si le "
@@ -169,7 +177,18 @@ HEADER_FIELD_HINTS = {
         "extrais quand même ce code comme devise plutôt que de renvoyer "
         "null."
     ),
-    "montant_total": "montant total du document (ex: 'Total TTC', 'Valeur totale', 'Net à payer')",
+    "montant_total": (
+        "montant total du document (ex: 'Total TTC', 'Valeur totale', 'Net "
+        "à payer'). Un montant s'écrit TOUJOURS avec une partie décimale "
+        "(virgule ou point suivi de 1-2 chiffres, ex: '196,90', '4 163.95', "
+        "'1.906,21') - ne renvoie JAMAIS un grand nombre entier sans "
+        "séparateur décimal (ex: '4112787221') comme montant, même s'il "
+        "apparaît dans la même zone/ligne que d'autres informations "
+        "financières : un tel nombre est presque certainement un code "
+        "interne (référence, identifiant) mal positionné par l'OCR, pas un "
+        "montant. Si aucune valeur correctement formatée comme un montant "
+        "n'est identifiable, renvoie null plutôt qu'un nombre suspect."
+    ),
 }
 
 HEADER_FIELDS = list(HEADER_FIELD_HINTS.keys())
