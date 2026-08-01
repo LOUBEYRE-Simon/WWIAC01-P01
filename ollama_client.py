@@ -11,14 +11,59 @@ donnée ne quitte le réseau interne à cette étape.
 """
 
 import json
+import re
 import requests
 
 DEFAULT_OLLAMA_URL = "http://localhost:11434"
 DEFAULT_MODEL = "minicpm-v4.5:latest"
 
+# Repère un bloc ```json ... ``` ou ``` ... ``` entourant tout le message.
+_FENCE_RE = re.compile(r"^```(?:json)?\s*(.*?)\s*```$", re.DOTALL | re.IGNORECASE)
+# Filet de sécurité : le premier bloc { ... } du texte, au cas où le modèle
+# aurait ajouté du texte avant/après le JSON malgré les consignes.
+_BRACE_RE = re.compile(r"\{.*\}", re.DOTALL)
+
 
 class OllamaError(Exception):
     pass
+
+
+def _extract_json(content: str) -> dict:
+    """
+    Certains modèles (minicpm-v4.5 en pratique, observé en usage réel) ne
+    respectent pas toujours format="json" à la lettre et enveloppent leur
+    réponse dans des balises markdown (```json ... ```), voire ajoutent du
+    texte autour. On nettoie en plusieurs passes avant d'abandonner :
+      1. essai direct (cas nominal, format="json" respecté)
+      2. balises markdown retirées
+      3. premier bloc { ... } extrait du texte
+    """
+    stripped = content.strip()
+
+    try:
+        return json.loads(stripped)
+    except json.JSONDecodeError:
+        pass
+
+    fence_match = _FENCE_RE.match(stripped)
+    if fence_match:
+        try:
+            return json.loads(fence_match.group(1).strip())
+        except json.JSONDecodeError:
+            pass
+
+    brace_match = _BRACE_RE.search(stripped)
+    if brace_match:
+        try:
+            return json.loads(brace_match.group(0))
+        except json.JSONDecodeError:
+            pass
+
+    raise OllamaError(
+        f"Le modèle n'a pas renvoyé un JSON exploitable (essai direct, sans balises "
+        f"markdown, et extraction de bloc {{...}} ont tous échoué) - "
+        f"contenu brut du modèle : {content[:1000]}"
+    )
 
 
 def call_ollama_json(
@@ -74,10 +119,4 @@ def call_ollama_json(
     if not content:
         raise OllamaError(f"Réponse Ollama vide ou de forme inattendue : {body}")
 
-    try:
-        return json.loads(content)
-    except json.JSONDecodeError as exc:
-        raise OllamaError(
-            f"Le modèle n'a pas renvoyé un JSON valide malgré format='json' : {exc} - "
-            f"contenu brut du modèle : {content[:1000]}"
-        )
+    return _extract_json(content)

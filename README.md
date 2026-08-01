@@ -16,7 +16,7 @@ Premier prototype fonctionnel des 4 modules discutés dans le dossier d'explorat
 | `api_server.py` | Point d'entrée HTTP de test (`POST /process-page`) : PDF ou image en base64 → JSON complet en un seul appel. Utile pour des tests rapides via curl, mais **ce n'est pas le mode retenu pour la production** (voir section CLI ci-dessous). |
 | `step1_split_pdf.py` à `step6_ollama_lines.py` | Scripts CLI, un par étape du pipeline, appelés individuellement par le PHP via `exec`/`proc_open`. C'est le mode d'intégration retenu en production. Voir section dédiée. |
 | `cli_common.py` | Contrat commun aux scripts CLI (JSON sur stdin, JSON sur stdout, gestion d'erreur uniforme). |
-| `ollama_client.py` | Client HTTP minimal pour Ollama local (`/api/chat`, `format="json"`), utilisé par step5 et step6. |
+| `ollama_client.py` | Client HTTP minimal pour Ollama local (`/api/chat`, `format="json"`), utilisé par step5 et step6. Tolérant aux réponses enveloppées dans des balises markdown ```` ```json ... ``` ```` (observé en usage réel avec minicpm-v4.5 malgré `format="json"`) - voir section dédiée ci-dessous. |
 | `pipeline_orchestrator.php` | Squelette d'orchestration PHP : récupère le PDF par URL (wget), boucle sur les pages, enchaîne les 6 scripts CLI via `proc_open`, agrège le résultat. À adapter à l'architecture PHP existante. |
 | `mock_ollama_server.py` | Serveur Flask factice reproduisant la forme de l'API Ollama - utilisé uniquement pour valider step5/step6 dans cet environnement de prototypage (Ollama réel non installable ici). Ne remplace pas un test contre le vrai minicpm-v4.5. |
 
@@ -54,6 +54,8 @@ Contrat commun (voir `cli_common.py`) : chaque script lit un objet JSON unique s
 - `step2` : ~0.1 s (PDF natif) à ~6-15 s (OCR, selon DPI).
 - `step3` : ~4-5 s, dont la majorité est le chargement du modèle spaCy à chaque appel - c'est le principal surcoût du mode "un process par étape".
 - `step5`/`step6` : dépend entièrement du temps de réponse d'Ollama/minicpm-v4.5 sur la machine cible - à mesurer avec le vrai modèle, aucune données fiables disponibles depuis cet environnement de prototypage (Ollama n'a pas pu être installé ici, voir note ci-dessous).
+
+**Bug corrigé suite à un test en production réelle :** `step5_ollama_header.py` a échoué avec `minicpm-v4.5:latest` malgré `format="json"` - le modèle enveloppait sa réponse dans des balises markdown ```` ```json ... ``` ````, que `json.loads()` refuse de parser telles quelles. `ollama_client.py` nettoie désormais la réponse en 3 passes avant d'abandonner : essai direct, puis balises markdown retirées, puis extraction du premier bloc `{...}` du texte (au cas où le modèle ajoute du texte avant/après le JSON). Testé avec le contenu exact qui a fait planter l'appel en production, plus plusieurs variantes (JSON pur, balises sans "json", texte parasite autour, contenu réellement invalide - qui doit toujours lever une erreur claire).
 
 **Limite de validation à connaître :** `step5`/`step6` ont été testés contre `mock_ollama_server.py`, un faux serveur Flask qui reproduit exactement la forme JSON de l'API Ollama (`/api/chat`, champ `message.content`) - cela valide la construction de la requête, le parsing de la réponse et la gestion d'erreur (timeout, connexion refusée, JSON invalide), mais **pas** la qualité réelle des réponses de minicpm-v4.5 sur vos documents. Ollama n'a pas pu être installé dans cet environnement de prototypage (pas d'accès root, script d'installation officiel nécessitant sudo). Premier test à faire côté utilisateur avant mise en production :
 ```bash
