@@ -57,12 +57,14 @@ HEADER_FIELD_HINTS = {
         "destinataire_adresse, le code postal et la ville peuvent apparaître "
         "ailleurs dans le texte (souvent en en-tête/pied de page, séparés de "
         "la rue) - inclus-les si tu les identifies pour la même entité, "
-        "même sur une autre ligne ou un autre bloc. ATTENTION : n'inclus "
-        "JAMAIS le numéro SIRET, le numéro RCS, le numéro de TVA, ni le "
-        "capital social dans cette valeur - ce sont des identifiants "
-        "légaux de l'entreprise, pas des éléments d'adresse postale, même "
-        "s'ils apparaissent sur la même ligne ou juste après la rue dans "
-        "le texte source."
+        "même sur une autre ligne ou un autre bloc. Une ligne du type 'CS "
+        "90149' ou 'BP 55065' (boîte postale/cedex) fait partie intégrante "
+        "de l'adresse et doit être incluse, même isolée sur sa propre "
+        "ligne. ATTENTION : n'inclus JAMAIS le numéro SIRET, le numéro RCS, "
+        "le numéro de TVA, ni le capital social dans cette valeur - ce sont "
+        "des identifiants légaux de l'entreprise, pas des éléments "
+        "d'adresse postale, même s'ils apparaissent sur la même ligne ou "
+        "juste après la rue dans le texte source."
     ),
     "destinataire_nom": (
         "nom de l'entité qui reçoit la marchandise et/ou la facture - "
@@ -109,7 +111,12 @@ HEADER_FIELD_HINTS = {
         "d'article, sous un libellé du type 'Votre N° de cde' - une valeur "
         "qui revient à l'identique sur toutes les lignes d'articles est un "
         "signal fort qu'il s'agit de la référence de commande à renvoyer, "
-        "même si elle n'apparaît pas dans l'en-tête du document."
+        "même si elle n'apparaît pas dans l'en-tête du document. Peut aussi "
+        "apparaître sous la forme d'un simple libellé 'commande' (sans "
+        "'Votre'/'N°') en en-tête de colonne d'un petit tableau récapitulatif "
+        "près du numéro de facture, avec d'autres colonnes comme 'type', "
+        "'du' (date) ou un code d'adresse de facturation - confirmé sur cas "
+        "réel."
     ),
     "devise": "devise du montant total (ex: EUR, USD)",
     "montant_total": "montant total du document (ex: 'Total TTC', 'Valeur totale', 'Net à payer')",
