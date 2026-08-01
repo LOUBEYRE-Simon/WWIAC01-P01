@@ -328,14 +328,25 @@ function process_document(string $pdfUrl, array &$logs = []): array
         // en pied de document) - pas les pages intermédiaires, qui sont
         // typiquement des lignes de détail déjà couvertes par step6 page par
         // page. Le tout est en plus plafonné par truncate_for_context().
+        //
+        // Point important (régression observée puis corrigée) : sur un
+        // document de 2 pages, "première page" et "dernière page" sont les
+        // 2 SEULES pages - rien n'est omis. Insérer quand même un marqueur
+        // "[...]" entre les deux a mesurablement dégradé l'extraction (date
+        // perdue, référence de commande polluée par les codes articles) -
+        // le modèle semble l'avoir interprété comme un signal de contenu
+        // tronqué à "reconstituer". Ce marqueur n'est donc utilisé que
+        // lorsque des pages sont réellement omises (3 pages ou plus).
         if (!empty($allRawText)) {
             $nbExtractedPages = count($allRawText);
-            if ($nbExtractedPages > 1) {
-                $headerInputText = $allRawText[0]
-                    . "\n\n[...]\n\n"
-                    . $allRawText[$nbExtractedPages - 1];
-            } else {
+            if ($nbExtractedPages === 1) {
                 $headerInputText = $allRawText[0];
+            } elseif ($nbExtractedPages === 2) {
+                $headerInputText = $allRawText[0] . "\n\n" . $allRawText[1];
+            } else {
+                $headerInputText = $allRawText[0]
+                    . "\n\n[Pages intermédiaires non incluses]\n\n"
+                    . $allRawText[$nbExtractedPages - 1];
             }
             $headerInputText = truncate_for_context($headerInputText, HEADER_TEXT_MAX_CHARS);
 
