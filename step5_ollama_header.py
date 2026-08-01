@@ -52,7 +52,18 @@ HEADER_FIELD_HINTS = {
         "entité est présente dans le texte, même si un autre nom apparaît "
         "ailleurs et te semble plus visible ou plus proche du début du texte."
     ),
-    "emetteur_adresse": "adresse de l'émetteur",
+    "emetteur_adresse": (
+        "adresse de l'émetteur - rue, code postal et ville. Comme pour "
+        "destinataire_adresse, le code postal et la ville peuvent apparaître "
+        "ailleurs dans le texte (souvent en en-tête/pied de page, séparés de "
+        "la rue) - inclus-les si tu les identifies pour la même entité, "
+        "même sur une autre ligne ou un autre bloc. ATTENTION : n'inclus "
+        "JAMAIS le numéro SIRET, le numéro RCS, le numéro de TVA, ni le "
+        "capital social dans cette valeur - ce sont des identifiants "
+        "légaux de l'entreprise, pas des éléments d'adresse postale, même "
+        "s'ils apparaissent sur la même ligne ou juste après la rue dans "
+        "le texte source."
+    ),
     "destinataire_nom": (
         "nom de l'entité qui reçoit la marchandise et/ou la facture - "
         "peut y avoir une adresse de facturation et une adresse de livraison distinctes"
@@ -64,7 +75,11 @@ HEADER_FIELD_HINTS = {
         "la même entité (même si sur une autre ligne ou dans un autre bloc), "
         "inclus-les dans la valeur renvoyée plutôt que de t'arrêter à la rue."
     ),
-    "numero_document": "numéro de la facture/du document (ex: 'Facture: 91036701', 'N° de facture')",
+    "numero_document": (
+        "numéro de la facture/du document (ex: 'Facture: 91036701', 'N° de "
+        "facture'). Renvoie UNIQUEMENT le numéro isolé (ex: '91036701'), "
+        "jamais le mot 'Facture' ou le libellé qui le précède accolé devant."
+    ),
     "date_document": (
         "date d'émission du document (ex: 'Date de facture'). Peut aussi "
         "apparaître SANS libellé explicite, sous la forme d'une mention "
