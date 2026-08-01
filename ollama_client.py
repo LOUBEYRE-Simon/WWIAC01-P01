@@ -21,6 +21,19 @@ DEFAULT_MODEL = "minicpm-v4.5:latest"
 # en usage réel - un champ correctement extrait dans un appel revenait à null
 # dans un appel suivant, prompt strictement identique par ailleurs).
 DEFAULT_TEMPERATURE = 0.1
+# Bug réel constaté : une erreur HTTP 400 "exceed_context_size_error"
+# (4257 tokens > 4096) est remontée par Ollama alors que le texte envoyé
+# était censé être plafonné à HEADER_TEXT_MAX_CHARS (12000 caractères) côté
+# PHP - soit ~3000-4000 tokens de texte de document, PLUS le prompt système
+# ET la longue description de tous les champs (HEADER_FIELD_HINTS a
+# considérablement grossi au fil des itérations). La cause n'est PAS la
+# fenêtre de contexte réelle du modèle (minicpm-v4.5 en supporte bien plus),
+# mais le paramètre num_ctx d'Ollama, qui vaut 4096 PAR DÉFAUT si on ne le
+# précise pas explicitement dans la requête - quelle que soit la capacité
+# réelle du modèle chargé. On le fixe donc nous-mêmes, avec une marge large
+# au-dessus du plafond de texte actuel (12000 caractères pour l'en-tête, plus
+# prompt système + hints + réponse JSON attendue).
+DEFAULT_NUM_CTX = 16384
 
 # Repère un bloc ```json ... ``` ou ``` ... ``` entourant tout le message.
 _FENCE_RE = re.compile(r"^```(?:json)?\s*(.*?)\s*```$", re.DOTALL | re.IGNORECASE)
@@ -78,6 +91,7 @@ def call_ollama_json(
     base_url: str = DEFAULT_OLLAMA_URL,
     timeout: int = 120,
     temperature: float = DEFAULT_TEMPERATURE,
+    num_ctx: int = DEFAULT_NUM_CTX,
 ) -> dict:
     """
     Appelle Ollama en mode chat en exigeant une réponse JSON stricte
@@ -105,7 +119,7 @@ def call_ollama_json(
                 "messages": messages,
                 "format": "json",
                 "stream": False,
-                "options": {"temperature": temperature},
+                "options": {"temperature": temperature, "num_ctx": num_ctx},
                 # Désactive la phase de "réflexion" des modèles hybrides à
                 # raisonnement (Qwen3, DeepSeek-R1...) - observé en usage réel :
                 # sans ce paramètre, ces modèles peuvent épuiser tout leur
