@@ -22,6 +22,14 @@
  *                le protocole /api/chat d'Ollama - pas un LLM externe avec une
  *                API différente (OpenAI/Anthropic/etc.), qui demanderait un
  *                client dédié (voir remarque de sécurité plus bas).
+ *   skip_lines - optionnel (1/true pour activer), désactive step6 (lignes de
+ *                détail). Utile pour des tests ciblés sur l'en-tête/le type de
+ *                document/l'anonymisation sans payer le coût de l'appel modèle
+ *                sur les lignes - décision actée : l'extraction de lignes va
+ *                être reprise par un moteur à positions fixes (non-IA), pas
+ *                par le SLM local, en raison d'un taux d'erreur trop élevé
+ *                constaté en tests (colonnes décalées, valeurs recalculées,
+ *                transpositions de chiffres).
  *
  * La réponse inclut désormais les informations de contrôle demandées :
  *   - "fid"                 : l'identifiant transmis par l'appelant (ou null si absent)
@@ -58,6 +66,7 @@ $requestStart = microtime(true);
 $fid = $_GET['fid'] ?? null;
 $model = $_GET['model'] ?? null;
 $ollamaUrl = $_GET['ollama_url'] ?? null;
+$skipLines = in_array($_GET['skip_lines'] ?? '', ['1', 'true', 'yes'], true);
 
 $ficParam = $_GET['fic'] ?? null;
 if (!$ficParam) {
@@ -85,7 +94,7 @@ if ($pdfUrl === false || !filter_var($pdfUrl, FILTER_VALIDATE_URL)) {
 
 $logs = [];
 try {
-    $result = process_document($pdfUrl, $logs, $model, $ollamaUrl);
+    $result = process_document($pdfUrl, $logs, $model, $ollamaUrl, $skipLines);
     $result['fid'] = $fid;
     $result['request_duration_ms'] = round((microtime(true) - $requestStart) * 1000);
     echo json_encode($result, JSON_UNESCAPED_UNICODE);

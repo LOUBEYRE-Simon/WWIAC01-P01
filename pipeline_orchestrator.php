@@ -220,7 +220,8 @@ function process_document(
     string $pdfUrl,
     array &$logs = [],
     ?string $model = null,
-    ?string $ollamaUrl = null
+    ?string $ollamaUrl = null,
+    bool $skipLines = false
 ): array {
     $globalStart = microtime(true);
 
@@ -326,27 +327,38 @@ function process_document(
         // quel. Utiliser le type global (déterminé après la passe 1, une fois
         // toutes les pages classées) garantit un schéma de champs uniforme sur
         // tout le document.
-        foreach ($successfulPages as $successfulPage) {
-            $pageNumber = $successfulPage['page_number'];
-            $rawText = $successfulPage['raw_text'];
-            try {
-                // Texte plafonné (voir HEADER_TEXT_MAX_CHARS/LINES_TEXT_MAX_CHARS
-                // en tête de fichier) - le modèle est un SLM à ~40K tokens de
-                // contexte, pas de marge pour envoyer une page entière sans limite.
-                $linesInputText = truncate_for_context($rawText, LINES_TEXT_MAX_CHARS);
-                $linesResult = timed_call($logs, 'step6_ollama_lines.py', function () use ($linesInputText, $documentType, $ollamaOverrides) {
-                    return call_python_step('step6_ollama_lines.py', array_merge([
-                        'text' => $linesInputText,
-                        'document_type' => $documentType,
-                    ], $ollamaOverrides), STEP_TIMEOUTS['lines']);
-                }, $pageNumber);
+        // $skipLines : ajouté après constat (tests répétés sur un même document
+        // multi-lignes) que le SLM local produit trop d'erreurs d'extraction
+        // ligne à ligne (colonnes décalées, valeurs recalculées au lieu de
+        // recopiées, transpositions de chiffres) pour être fiable en l'état -
+        // décision de traiter les lignes de détail par un moteur séparé
+        // (positions fixes par format de document, sans IA à l'exécution).
+        // En attendant, on peut désactiver step6 pour accélérer/alléger les
+        // tests qui ne portent que sur l'en-tête, le type de document et
+        // l'anonymisation (comparaison de modèles, par exemple).
+        if (!$skipLines) {
+            foreach ($successfulPages as $successfulPage) {
+                $pageNumber = $successfulPage['page_number'];
+                $rawText = $successfulPage['raw_text'];
+                try {
+                    // Texte plafonné (voir HEADER_TEXT_MAX_CHARS/LINES_TEXT_MAX_CHARS
+                    // en tête de fichier) - le modèle est un SLM à ~40K tokens de
+                    // contexte, pas de marge pour envoyer une page entière sans limite.
+                    $linesInputText = truncate_for_context($rawText, LINES_TEXT_MAX_CHARS);
+                    $linesResult = timed_call($logs, 'step6_ollama_lines.py', function () use ($linesInputText, $documentType, $ollamaOverrides) {
+                        return call_python_step('step6_ollama_lines.py', array_merge([
+                            'text' => $linesInputText,
+                            'document_type' => $documentType,
+                        ], $ollamaOverrides), STEP_TIMEOUTS['lines']);
+                    }, $pageNumber);
 
-                if (!($linesResult['skipped'] ?? false)) {
-                    $allLines = array_merge($allLines, $linesResult['lines']);
+                    if (!($linesResult['skipped'] ?? false)) {
+                        $allLines = array_merge($allLines, $linesResult['lines']);
+                    }
+                } catch (Throwable $lineError) {
+                    // Idem : une page en échec sur step6 ne doit pas faire perdre
+                    // les lignes des autres pages. Déjà journalisé par timed_call.
                 }
-            } catch (Throwable $lineError) {
-                // Idem : une page en échec sur step6 ne doit pas faire perdre
-                // les lignes des autres pages. Déjà journalisé par timed_call.
             }
         }
 
