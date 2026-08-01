@@ -65,7 +65,12 @@ HEADER_FIELD_HINTS = {
         "PAS un numéro de bordereau/BL, PAS un code client. Peut apparaître "
         "sous des libellés variés : 'Votre référence', 'Numéro de commande', "
         "'N° de commande', 'Commande client n°', 'Numéro d'engagement', "
-        "'PO number', 'Order reference'."
+        "'PO number', 'Order reference'. EXCLUS explicitement : 'Livraison "
+        "client n°', 'Préparation livraison n°' - ce sont des références de "
+        "livraison, pas la référence de commande du client, même si le "
+        "libellé se ressemble. Renvoie UNIQUEMENT la valeur isolée (le code "
+        "après le libellé), jamais toute la ligne de texte brute qui "
+        "l'entoure (pas de date ni de code interne collés à la suite)."
     ),
     "devise": "devise du montant total (ex: EUR, USD)",
     "montant_total": "montant total du document (ex: 'Total TTC', 'Valeur totale', 'Net à payer')",
