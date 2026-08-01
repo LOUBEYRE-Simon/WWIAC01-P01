@@ -32,10 +32,22 @@ _nlp_engine = _provider.create_engine()
 analyzer = AnalyzerEngine(nlp_engine=_nlp_engine, supported_languages=["fr"])
 anonymizer = AnonymizerEngine()
 
-# Types d'entités à traiter en priorité pour ce prototype (documents commerciaux :
-# on cible surtout personnes, organisations, lieux, coordonnées - pas les montants,
-# qui sont utiles au classifieur de type de document).
-ENTITY_TYPES = ["PERSON", "ORGANIZATION", "LOCATION", "EMAIL_ADDRESS", "PHONE_NUMBER"]
+# Décision produit : n'anonymiser QUE les entités susceptibles de désigner
+# l'émetteur ou le destinataire du document (noms de personnes/organisations),
+# pas l'ensemble du texte. PERSON/ORGANIZATION sont les deux types Presidio qui
+# correspondent à des identités - LOCATION/EMAIL_ADDRESS/PHONE_NUMBER ont été
+# retirés : ce sont eux qui généraient l'essentiel du bruit observé en tests
+# réels sur du texte OCR dégradé (ex: "Votre N°", "Ligne000020", des fragments
+# de libellés de conditionnement pris pour des lieux/téléphones).
+#
+# Limite assumée (pas une réordonnance du pipeline) : ceci restreint le TYPE
+# d'entité, pas encore le RÔLE (émetteur/destinataire) - un nom de société
+# tiers mentionné ailleurs dans le document (transporteur, assureur...) sera
+# aussi anonymisé. Cibler précisément les 2 parties demanderait d'inverser
+# l'ordre du pipeline (extraire l'en-tête via le modèle AVANT d'anonymiser),
+# ce qui retarderait la disponibilité de la trace anonymisée après l'appel
+# modèle - écarté pour l'instant au profit de cette restriction plus simple.
+ENTITY_TYPES = ["PERSON", "ORGANIZATION"]
 
 
 def _make_token_operator(entity_type: str, entity_mapping: Dict[str, str], counters: Dict[str, int]):
