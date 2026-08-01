@@ -95,7 +95,15 @@ HEADER_FIELD_HINTS = {
         "Une adresse complète inclut la ville ET le code postal, pas seulement "
         "la rue - si ces informations apparaissent ailleurs dans le texte pour "
         "la même entité (même si sur une autre ligne ou dans un autre bloc), "
-        "inclus-les dans la valeur renvoyée plutôt que de t'arrêter à la rue."
+        "inclus-les dans la valeur renvoyée plutôt que de t'arrêter à la rue. "
+        "ATTENTION : comme pour destinataire_nom, si l'adresse de livraison "
+        "(bloc 'LIVRAISON:'/'Adresse de livraison') appartient en réalité à "
+        "un TRANSITAIRE/transporteur (ex: nom d'une société de fret/logistique "
+        "différente du client, ou en lien avec un 'Donneur d'ordre' distinct) "
+        "plutôt qu'au client lui-même, ne renvoie PAS cette adresse de "
+        "transitaire seule - privilégie l'adresse propre du client "
+        "('Donneur d'ordre'/'FACTURATION:'), quitte à donner les deux si "
+        "elles sont clairement distinctes et toutes deux disponibles."
     ),
     "numero_document": (
         "numéro de la facture/du document (ex: 'Facture: 91036701', 'N° de "
