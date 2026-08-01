@@ -28,9 +28,15 @@ from ollama_client import call_ollama_json, DEFAULT_MODEL, DEFAULT_OLLAMA_URL
 SYSTEM_PROMPT = (
     "Tu es un assistant d'extraction de données pour des documents commerciaux "
     "et de transport/logistique. Tu réponds UNIQUEMENT avec un objet JSON valide : "
-    "{\"lines\": [...]} - une liste d'objets, un par ligne de détail identifiée. "
+    "{\"lines\": [...]} - une liste d'objets, un par ligne de détail identifiée. "
     "Si aucune ligne n'est identifiable, renvoie {\"lines\": []}. N'invente jamais "
-    "de valeur absente du texte."
+    "de valeur absente du texte. IMPORTANT : chaque valeur numérique (quantité, "
+    "prix unitaire, montant de ligne) doit être RECOPIÉE TELLE QU'ELLE APPARAÎT "
+    "dans le texte, à l'endroit précis de cette ligne - ne calcule JAMAIS un "
+    "montant en multipliant quantité par prix unitaire, ce calcul est souvent "
+    "faux (conversions d'unités, remises, arrondis non visibles dans le texte). "
+    "Si tu ne trouves pas de montant explicite pour une ligne, mets la valeur null "
+    "plutôt que de le déduire par un calcul."
 )
 
 LINE_TYPES_ELIGIBLE = {"invoice", "delivery_note", "packing_list"}
