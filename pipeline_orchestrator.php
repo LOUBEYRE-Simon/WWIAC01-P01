@@ -66,6 +66,38 @@ const STEP_TIMEOUTS = [
     'lines'     => 120,
 ];
 
+// minicpm-v4.5 est un SLM (small language model) : fenêtre de contexte
+// d'environ 40K tokens, PAS un grand modèle avec des dizaines/centaines de
+// milliers de tokens de marge. Cette fenêtre doit couvrir : le prompt
+// système, les instructions/le nom des champs demandés, le texte du
+// document, ET la réponse JSON générée par le modèle. Ces plafonds en
+// caractères sont volontairement prudents (marge large sous la limite
+// réelle) - à ajuster si des mesures de tokenisation réelles sont faites.
+const HEADER_TEXT_MAX_CHARS = 12000; // step5 : texte page 1 + dernière page
+const LINES_TEXT_MAX_CHARS = 12000;  // step6 : texte d'une seule page
+
+
+// ---------------------------------------------------------------------
+// Tronque un texte pour rester sous un budget de caractères, en gardant le
+// début (en-tête/émetteur/destinataire, quasi toujours au début du texte)
+// ET la fin (totaux/devise, souvent en pied de document sur les factures
+// multi-pages) - c'est le milieu, généralement les lignes de détail (déjà
+// couvertes séparément par step6), qui saute en cas de dépassement.
+// ---------------------------------------------------------------------
+function truncate_for_context(string $text, int $maxChars): string
+{
+    if (mb_strlen($text) <= $maxChars) {
+        return $text;
+    }
+
+    $headChars = (int) round($maxChars * 0.6);
+    $tailChars = $maxChars - $headChars;
+
+    return mb_substr($text, 0, $headChars)
+        . "\n\n[... contenu tronqué pour respecter la fenêtre de contexte du modèle ...]\n\n"
+        . mb_substr($text, -$tailChars);
+}
+
 
 // ---------------------------------------------------------------------
 // Exécution d'une étape Python : écrit $input en JSON sur stdin, lit le
@@ -204,6 +236,7 @@ function process_document(string $pdfUrl, array &$logs = []): array
         $documentTypeConfidence = 0.0;
         $header = null;
         $allLines = [];
+        $allRawText = []; // texte de chaque page correctement extraite, pour l'étape 5 (voir plus bas)
 
         for ($pageNumber = 1; $pageNumber <= $nbPages; $pageNumber++) {
             try {
@@ -216,6 +249,7 @@ function process_document(string $pdfUrl, array &$logs = []): array
                 }, $pageNumber);
 
                 $rawText = $extraction['text'];
+                $allRawText[] = $rawText;
 
                 // Étape 3 : anonymisation (trace/audit - pas sur le chemin Ollama)
                 $anonymization = timed_call($logs, 'step3_anonymize.py', function () use ($rawText) {
@@ -248,24 +282,15 @@ function process_document(string $pdfUrl, array &$logs = []): array
                     $documentTypeConfidence = $classification['confidence'];
                 }
 
-                // Étape 5 : en-tête (émetteur/destinataire...) - typiquement
-                // présent sur la première page seulement, donc un seul appel
-                // suffit. Ajuster si le format réel varie.
-                if ($pageNumber === 1) {
-                    $headerResult = timed_call($logs, 'step5_ollama_header.py', function () use ($rawText, $classification) {
-                        return call_python_step('step5_ollama_header.py', [
-                            'text' => $rawText,
-                            'document_type' => $classification['document_type'],
-                        ], STEP_TIMEOUTS['header']);
-                    }, $pageNumber);
-                    $header = $headerResult['header'];
-                }
-
                 // Étape 6 (conditionnelle) : lignes de détail, potentiellement
                 // réparties sur plusieurs pages -> on agrège au fil des pages.
-                $linesResult = timed_call($logs, 'step6_ollama_lines.py', function () use ($rawText, $classification) {
+                // Texte plafonné (voir HEADER_TEXT_MAX_CHARS/LINES_TEXT_MAX_CHARS
+                // en tête de fichier) - le modèle est un SLM à ~40K tokens de
+                // contexte, pas de marge pour envoyer une page entière sans limite.
+                $linesInputText = truncate_for_context($rawText, LINES_TEXT_MAX_CHARS);
+                $linesResult = timed_call($logs, 'step6_ollama_lines.py', function () use ($linesInputText, $classification) {
                     return call_python_step('step6_ollama_lines.py', [
-                        'text' => $rawText,
+                        'text' => $linesInputText,
                         'document_type' => $classification['document_type'],
                     ], STEP_TIMEOUTS['lines']);
                 }, $pageNumber);
@@ -283,6 +308,44 @@ function process_document(string $pdfUrl, array &$logs = []): array
                     'error' => $pageError->getMessage(),
                 ];
             }
+        }
+
+        // Étape 5 : en-tête (émetteur/destinataire, mais aussi totaux/devise).
+        // Appelée UNE SEULE FOIS, après la boucle.
+        //
+        // Correction suite à un cas réel : sur une facture de 2 pages, les
+        // totaux (Sous-total HT, TVA, Total TTC) étaient en page 2, alors que
+        // step5 n'était appelée qu'avec le texte de la page 1 -> montant_total
+        // et devise revenaient systématiquement à null. L'hypothèse "l'en-tête
+        // est sur la première page" ne tient pas dès qu'un total de facture
+        // apparaît en pied de document plutôt qu'en en-tête.
+        //
+        // MAIS : minicpm-v4.5 est un SLM à ~40K tokens de contexte - pas un
+        // grand modèle. Concaténer TOUTES les pages (comme un premier essai
+        // l'a fait) fonctionne sur 1-2 pages mais casse dès qu'un document en
+        // fait davantage. On envoie donc seulement la première page (en-tête,
+        // quasi toujours en tête de document) et la dernière (totaux, souvent
+        // en pied de document) - pas les pages intermédiaires, qui sont
+        // typiquement des lignes de détail déjà couvertes par step6 page par
+        // page. Le tout est en plus plafonné par truncate_for_context().
+        if (!empty($allRawText)) {
+            $nbExtractedPages = count($allRawText);
+            if ($nbExtractedPages > 1) {
+                $headerInputText = $allRawText[0]
+                    . "\n\n[...]\n\n"
+                    . $allRawText[$nbExtractedPages - 1];
+            } else {
+                $headerInputText = $allRawText[0];
+            }
+            $headerInputText = truncate_for_context($headerInputText, HEADER_TEXT_MAX_CHARS);
+
+            $headerResult = timed_call($logs, 'step5_ollama_header.py', function () use ($headerInputText, $documentType) {
+                return call_python_step('step5_ollama_header.py', [
+                    'text' => $headerInputText,
+                    'document_type' => $documentType,
+                ], STEP_TIMEOUTS['header']);
+            });
+            $header = $headerResult['header'];
         }
 
         return [
