@@ -69,7 +69,17 @@ FRAGMENTED_LAYOUT_EXAMPLE = (
     "numéro de ligne interne à ignorer comme référence), \"10\" (à côté du code "
     "article) est la quantité à retenir pour quantite, \"15,00\" (avant le \"1\") "
     "est prix_unitaire, et \"150,00\" (juste après ce \"1\") est montant_ligne - "
-    "recopié tel quel, jamais recalculé."
+    "recopié tel quel, jamais recalculé.\n\n"
+    "Règle explicite à appliquer systématiquement, pas seulement dans cet exemple : "
+    "la quantite d'un article se trouve TOUJOURS sur la ligne où figurent le code "
+    "article et la désignation (le nombre juste avant l'unité de conditionnement, "
+    "ex: \"10 CAR\", \"534 CAR\") - JAMAIS sur la ligne du prix/montant. Le \"1\" "
+    "isolé entre le prix unitaire et le montant, sur la ligne de prix, est un code "
+    "TVA - ce n'est ni une quantité ni un prix, ignore-le. Si ces deux lignes "
+    "(article et prix) sont séparées par une ligne \"LigneXXXXXX\" ou par toute "
+    "autre ligne, elles décrivent quand même le même article : va chercher la "
+    "quantité sur la ligne article même si elle est physiquement éloignée de la "
+    "ligne prix dans le texte."
 )
 
 
