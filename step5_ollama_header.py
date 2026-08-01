@@ -32,23 +32,51 @@ SYSTEM_PROMPT = (
     "est absente du texte, mets la valeur null - n'invente jamais de valeur."
 )
 
-HEADER_FIELDS = [
-    "emetteur_nom", "emetteur_adresse",
-    "destinataire_nom", "destinataire_adresse",
-    "numero_document", "date_document",
-    "reference_commande", "devise", "montant_total",
-]
+# Indices/synonymes par champ - un simple nom de clé ("reference_commande")
+# ne suffit pas toujours à un petit modèle pour relier le champ demandé au
+# libellé réellement utilisé dans le document (ex: "Votre référence" ou
+# "Numéro d'engagement", jamais littéralement "référence de commande").
+# Ajouté après un cas réel où reference_commande revenait à null de façon
+# stable (y compris à température basse) malgré la valeur présente en clair
+# dans le texte, sous un libellé différent.
+HEADER_FIELD_HINTS = {
+    "emetteur_nom": (
+        "nom de l'entité qui émet/facture le document - souvent en pied de "
+        "page, éventuellement après une mention 'Nom Commercial :'"
+    ),
+    "emetteur_adresse": "adresse de l'émetteur",
+    "destinataire_nom": (
+        "nom de l'entité qui reçoit la marchandise et/ou la facture - "
+        "peut y avoir une adresse de facturation et une adresse de livraison distinctes"
+    ),
+    "destinataire_adresse": "adresse(s) du destinataire (facturation et/ou livraison si distinctes)",
+    "numero_document": "numéro de la facture/du document (ex: 'Facture: 91036701', 'N° de facture')",
+    "date_document": "date d'émission du document (ex: 'Date de facture')",
+    "reference_commande": (
+        "référence de la commande PASSÉE PAR LE CLIENT - PAS un code article, "
+        "PAS un numéro de bordereau/BL, PAS un code client. Peut apparaître "
+        "sous des libellés variés : 'Votre référence', 'Numéro de commande', "
+        "'N° de commande', 'Numéro d'engagement', 'PO number', 'Order reference'."
+    ),
+    "devise": "devise du montant total (ex: EUR, USD)",
+    "montant_total": "montant total du document (ex: 'Total TTC', 'Valeur totale', 'Net à payer')",
+}
+
+HEADER_FIELDS = list(HEADER_FIELD_HINTS.keys())
 
 
 def build_prompt(text: str, document_type: str) -> str:
-    fields_list = ", ".join(HEADER_FIELDS)
+    fields_description = "\n".join(
+        f"- {field} : {hint}" for field, hint in HEADER_FIELD_HINTS.items()
+    )
     return (
         f"Type de document identifié : {document_type}.\n\n"
         f"Texte du document (extrait par OCR ou pdftotext, la mise en page peut "
         f"être imparfaite) :\n---\n{text}\n---\n\n"
-        f"Renvoie un objet JSON avec exactement ces clés : {fields_list}.\n"
-        f"'emetteur' = l'entité qui émet/facture le document. "
-        f"'destinataire' = l'entité qui reçoit la marchandise ou la facture."
+        f"Renvoie un objet JSON avec exactement les clés suivantes (l'indice après "
+        f"chaque clé précise ce qui est attendu, et sous quels libellés cette "
+        f"information apparaît généralement dans ce type de document) :\n"
+        f"{fields_description}"
     )
 
 
