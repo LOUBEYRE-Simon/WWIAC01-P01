@@ -216,9 +216,27 @@ function fetch_pdf_from_url(string $url): string
 // ---------------------------------------------------------------------
 // Orchestration complète pour un document
 // ---------------------------------------------------------------------
-function process_document(string $pdfUrl, array &$logs = []): array
-{
+function process_document(
+    string $pdfUrl,
+    array &$logs = [],
+    ?string $model = null,
+    ?string $ollamaUrl = null
+): array {
     $globalStart = microtime(true);
+
+    // Surcharge du modèle/serveur Ollama utilisé par step5/step6 - permet de
+    // comparer manuellement plusieurs modèles (un autre SLM, voire un LLM
+    // hébergé derrière une API compatible Ollama) sans changer de code.
+    // Ne couvre PAS un fournisseur externe avec une API différente
+    // (OpenAI/Anthropic/etc.) : ollama_client.py ne parle que le protocole
+    // /api/chat d'Ollama.
+    $ollamaOverrides = [];
+    if ($model !== null) {
+        $ollamaOverrides['model'] = $model;
+    }
+    if ($ollamaUrl !== null) {
+        $ollamaOverrides['ollama_url'] = $ollamaUrl;
+    }
 
     $pdfPath = timed_call($logs, 'fetch_pdf', function () use ($pdfUrl) {
         return fetch_pdf_from_url($pdfUrl);
@@ -288,11 +306,11 @@ function process_document(string $pdfUrl, array &$logs = []): array
                 // en tête de fichier) - le modèle est un SLM à ~40K tokens de
                 // contexte, pas de marge pour envoyer une page entière sans limite.
                 $linesInputText = truncate_for_context($rawText, LINES_TEXT_MAX_CHARS);
-                $linesResult = timed_call($logs, 'step6_ollama_lines.py', function () use ($linesInputText, $classification) {
-                    return call_python_step('step6_ollama_lines.py', [
+                $linesResult = timed_call($logs, 'step6_ollama_lines.py', function () use ($linesInputText, $classification, $ollamaOverrides) {
+                    return call_python_step('step6_ollama_lines.py', array_merge([
                         'text' => $linesInputText,
                         'document_type' => $classification['document_type'],
-                    ], STEP_TIMEOUTS['lines']);
+                    ], $ollamaOverrides), STEP_TIMEOUTS['lines']);
                 }, $pageNumber);
 
                 if (!($linesResult['skipped'] ?? false)) {
@@ -350,11 +368,11 @@ function process_document(string $pdfUrl, array &$logs = []): array
             }
             $headerInputText = truncate_for_context($headerInputText, HEADER_TEXT_MAX_CHARS);
 
-            $headerResult = timed_call($logs, 'step5_ollama_header.py', function () use ($headerInputText, $documentType) {
-                return call_python_step('step5_ollama_header.py', [
+            $headerResult = timed_call($logs, 'step5_ollama_header.py', function () use ($headerInputText, $documentType, $ollamaOverrides) {
+                return call_python_step('step5_ollama_header.py', array_merge([
                     'text' => $headerInputText,
                     'document_type' => $documentType,
-                ], STEP_TIMEOUTS['header']);
+                ], $ollamaOverrides), STEP_TIMEOUTS['header']);
             });
             $header = $headerResult['header'];
         }

@@ -23,7 +23,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from cli_common import run_step
-from ollama_client import call_ollama_json, DEFAULT_MODEL
+from ollama_client import call_ollama_json, DEFAULT_MODEL, DEFAULT_OLLAMA_URL
 
 SYSTEM_PROMPT = (
     "Tu es un assistant d'extraction de données pour des documents commerciaux "
@@ -58,6 +58,7 @@ def handler(payload: dict) -> dict:
     text = payload.get("text")
     document_type = payload.get("document_type", "unknown")
     model = payload.get("model") or DEFAULT_MODEL
+    ollama_url = payload.get("ollama_url") or DEFAULT_OLLAMA_URL
     if not text:
         raise ValueError("Champ 'text' manquant")
 
@@ -69,7 +70,7 @@ def handler(payload: dict) -> dict:
         }
 
     prompt = build_prompt(text, document_type)
-    result = call_ollama_json(prompt, system=SYSTEM_PROMPT, model=model)
+    result = call_ollama_json(prompt, system=SYSTEM_PROMPT, model=model, base_url=ollama_url)
     lines = result.get("lines", []) if isinstance(result, dict) else []
     return {"lines": lines, "model": model}
 

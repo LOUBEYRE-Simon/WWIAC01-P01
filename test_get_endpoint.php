@@ -3,17 +3,25 @@
  * Point d'entrée GET pratique pour des tests manuels rapides (navigateur ou
  * curl), sans avoir à construire un corps de requête.
  *
- * Usage : test_get_endpoint.php?fic=<URL du PDF encodée en base64>&fid=<id de suivi>
+ * Usage : test_get_endpoint.php?fic=<URL du PDF encodée en base64>&fid=<id de suivi>&model=<modèle Ollama>
  * Exemple donné par l'utilisateur :
  *   ?fic=aHR0cHM6Ly9lZGktZXhwbG9pdGF0aW9uLmdyb3VwZXNpZmEuY29tL2dlZC9TQUZFWC8yMDI2MDczMS9GRVgtRE9DLTAwMDAwMDc4MzYxNS5wZGY=
  *   (décode en https://edi-exploitation.groupesifa.com/ged/SAFEX/20260731/FEX-DOC-000000783615.pdf)
  *
  * Paramètres GET :
- *   fic - URL du PDF encodée en base64 (obligatoire)
- *   fid - identifiant de suivi/corrélation fourni par l'appelant (optionnel),
- *         renvoyé tel quel dans la réponse ("fid") pour confirmation - utile
- *         pour retrouver la bonne réponse quand plusieurs tests tournent en
- *         parallèle.
+ *   fic        - URL du PDF encodée en base64 (obligatoire)
+ *   fid        - identifiant de suivi/corrélation fourni par l'appelant (optionnel),
+ *                renvoyé tel quel dans la réponse ("fid") pour confirmation - utile
+ *                pour retrouver la bonne réponse quand plusieurs tests tournent en
+ *                parallèle.
+ *   model      - optionnel, surcharge le modèle Ollama utilisé pour step5/step6
+ *                (défaut : minicpm-v4.5:latest, voir DEFAULT_MODEL dans ollama_client.py).
+ *                Permet de comparer manuellement un autre SLM sur le même document.
+ *   ollama_url - optionnel, surcharge l'URL du serveur Ollama appelé (défaut :
+ *                http://localhost:11434). Ne couvre QUE des serveurs qui parlent
+ *                le protocole /api/chat d'Ollama - pas un LLM externe avec une
+ *                API différente (OpenAI/Anthropic/etc.), qui demanderait un
+ *                client dédié (voir remarque de sécurité plus bas).
  *
  * La réponse inclut désormais les informations de contrôle demandées :
  *   - "fid"                 : l'identifiant transmis par l'appelant (ou null si absent)
@@ -32,6 +40,14 @@
  * - Un GET est plus facilement mis en cache / rejoué / partagé qu'un POST.
  * Pour la production, préférer un vrai POST JSON (voir l'exemple en bas de
  * pipeline_orchestrator.php).
+ *
+ * ATTENTION - si ?model=/?ollama_url= pointent vers un LLM qui n'est PAS
+ * 100% local (hébergé chez un tiers, même via un proxy compatible Ollama) :
+ * la décision "on envoie le texte BRUT" (voir pipeline_orchestrator.php)
+ * n'est valable QUE pour un modèle local. Envoyer du texte brut (non
+ * anonymisé) à un service externe romprait l'objectif RGPD du projet - dans
+ * ce cas, il faut passer par le texte anonymisé (anonymized_text, déjà
+ * calculé par step3 pour chaque page) et non par raw_text.
  */
 
 require_once __DIR__ . '/pipeline_orchestrator.php';
@@ -40,6 +56,8 @@ header('Content-Type: application/json');
 
 $requestStart = microtime(true);
 $fid = $_GET['fid'] ?? null;
+$model = $_GET['model'] ?? null;
+$ollamaUrl = $_GET['ollama_url'] ?? null;
 
 $ficParam = $_GET['fic'] ?? null;
 if (!$ficParam) {
@@ -67,7 +85,7 @@ if ($pdfUrl === false || !filter_var($pdfUrl, FILTER_VALIDATE_URL)) {
 
 $logs = [];
 try {
-    $result = process_document($pdfUrl, $logs);
+    $result = process_document($pdfUrl, $logs, $model, $ollamaUrl);
     $result['fid'] = $fid;
     $result['request_duration_ms'] = round((microtime(true) - $requestStart) * 1000);
     echo json_encode($result, JSON_UNESCAPED_UNICODE);
